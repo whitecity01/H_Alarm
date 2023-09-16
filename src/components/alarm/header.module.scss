@@ -1,0 +1,38 @@
+@media (min-width: 1200px){
+    .margin{
+        padding-top:40px;
+        width:100%;
+    }
+    .container{
+        height: 40px;
+        .header{
+            margin:auto;
+            width: 800px;
+        }
+    }
+}
+
+.container{
+    width:100%;
+    top:0px;
+    position: fixed;
+    background-color: rgb(206, 206, 206);
+    overflow:hidden;
+    .header{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        position:relative;
+        height:100%;
+        div{
+            width:33.3333333%;
+            font-size:2em;
+        }
+        .title{
+            text-align: center;
+        }
+        .plus{
+            text-align:end;
+        }
+    }
+}

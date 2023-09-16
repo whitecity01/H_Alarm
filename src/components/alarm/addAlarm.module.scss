@@ -1,0 +1,80 @@
+@media (min-width: 1200px){
+
+    .container{
+        margin-top: 10px;
+        .alarm-input{
+            width:800px;
+            & > div{
+                padding-top:20px;
+            }
+            .date > div:nth-child(2){
+                & > button:first-child {
+                    margin-left: 0px;
+                }
+                & > button {
+                    margin-left: 10px;
+                }
+            }
+            .method{
+                & > button:first-child {
+                    margin-left: 0px;
+                }
+                & > button {
+                    margin-left: 10px;
+                }
+            }
+            .voice{
+                & > button:first-child {
+                    margin-left: 0px;
+                }
+                & > button {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+button{
+    border:1px solid black;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: none;
+}
+.button-click{
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 1px 1px black inset;
+}
+
+.container{
+    width:100%;
+    .alarm-input{
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin:auto;
+        .date{
+            width:100%;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            div{
+                text-align: center;
+                width:50%;
+            }
+        }
+        .method{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .voice{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+    }
+}
