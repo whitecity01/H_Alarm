@@ -27,6 +27,9 @@
         div{
             width:33.3333333%;
             font-size:2em;
+            & > span {
+                cursor: pointer;
+            }
         }
         .title{
             text-align: center;

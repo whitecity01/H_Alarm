@@ -1,25 +1,36 @@
 import classNames from 'classnames/bind';
 
+import {getTime} from '../../utils/utils';
+
 import alarmItemStyle from './alarmItem.module.scss';
 const style = classNames.bind(alarmItemStyle);
 
-const AlarmItem = ({isEdit}) => {
+const AlarmItem = ({isEdit, data, remove}) => {
+    const time = getTime(data.time);
+    const method = data.method === "email" ? "E": data.method === "call" ? "C" : "M";
+    // const alarmId = data.alarmId;
+    // const date = getDate(data.date);
+    // const week = getWeek(data.week);
+    // const repeat = data.repeat;
+    // const name = data.name;
+    // const message = data.message;
+
     return(
         <div className={style('alarm')}>
             <div className={style('delete', {hide:!isEdit})}>
-                <span>-</span>
+                <span onClick={remove}>-</span>
             </div>
             <div className={style('main')}>
                 <div>
-                    <span>8</span>
+                    <span>{time.hour}</span>
                     <span>:</span>
-                    <span>24</span>
+                    <span>{time.minute}</span>
                 </div>
                 <div>
-                    <span>AM</span>
+                    <span>{time.format}</span>
                 </div>
                 <div>
-                    <span>E</span>
+                    <span>{method}</span>
                 </div>
                 <div>
                     <input type="checkbox" />
