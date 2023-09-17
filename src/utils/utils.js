@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const getDate = (date) => {
     const dt = new Date(date);
     return {
@@ -51,3 +53,23 @@ export const getWeek = (week) => {
     });
 };
 
+export const axiosForm = async(url, form) => {
+    const response = await axios.post(url, form,{
+            withCredentials: true,
+            headers:{
+                "Content-Type": `application/json`,
+            }    
+        }
+    )
+
+    switch(response.status){
+        case 200:
+            return;
+        case 400:
+            throw new Error("잘못된 입력");
+        case 401:
+            throw new Error("중복된 입력");
+        default:
+            throw new Error(`서버 에러: ${response.status}`);
+    }
+}
