@@ -1,28 +1,16 @@
-import axios from 'axios';
+import { axiosForm } from "../utils/utils";
 
-const axiosForm = async(url, form) => {
-    const response = await axios.post(url, form,{
-            withCredentials: true,
-            headers:{
-                "Content-Type": `application/json`,
-            }    
-        }
-    )
+export const createAlarm = async(date, day, time, repeat, name, method, message) => {
 
-    switch(response.status){
-        case 200:
-            return;
-        case 400:
-            throw new Error("잘못된 입력");
-        default:
-            throw new Error(`서버 에러: ${response.status}`);
+    if (!(date ^ day)){
+        throw new Error("Only one of date and day must have a value");
+    }else if(!time|| repeat === null || !name || !method || !message){
+        throw new Error("All fields cannot be null");
     }
-}
 
-export const createAlarm = async(date, week, time, repeat, name, method, message) => {
     const form = {
         date,
-        week,
+        day,
         time,
         repeat,
         name,
@@ -36,11 +24,20 @@ export const readAlarm = async() => {
     return await axiosForm(process.env.REACT_APP_SERVER_URL+"/alarm/read", {});
 }
 
-export const updateAlarm = async(alarmId, date, week, time, repeat, name, method, message) => {
+export const updateAlarm = async(alarmId, date, day, time, repeat, name, method, message) => {
+
+    if (date !==null && day!==null){
+        throw new Error("Only one of date and day must have a value");
+    }else if(alarmId === null){
+        throw new Error("alarmId cannot be null");
+    }else if(!date && !day && !time && repeat === null && !name && !method && !message){
+        throw new Error("Value to modify does not exist");
+    };
+
     const form = {
         alarmId,
         date,
-        week,
+        day,
         time,
         repeat,
         name,
@@ -51,6 +48,9 @@ export const updateAlarm = async(alarmId, date, week, time, repeat, name, method
 }
 
 export const deleteAlarm = async(alarmId) => {
+    if(alarmId === null){
+        throw new Error("alarmId cannot be null");
+    }
     return await axiosForm(process.env.REACT_APP_SERVER_URL+"/alarm/delete", {alarmId});
 }
 
