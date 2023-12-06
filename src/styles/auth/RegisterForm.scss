@@ -1,66 +1,31 @@
 //미디어 쿼리 적용 예정
 
 //desktop (1920/1080~ )
-.register-form {
-  position: fixed;
-  left: 30%;
-  top: 198px;
-  transform: translateX(-50%);
 
-  .input-wrapper {
-    position: relative;
-    height: 50px;
-
-    &::after {
-      content: "";
-      display: block;
-      height: 1px;
-      background-color: #ffffff;
-      position: absolute;
-      bottom: 0;
-    }
-
-    &.id-input::after {
-      width: 260%;
-    }
-
-    &.pw-input::after {
-      width: 260%;
-      top: 102px;
-      height: 1px;
-    }
-  }
-
-  .id-form,
-  .pw-form {
-    position: relative;
-    color: #3d3d3d;
-    border-style: none;
-    background-color: black;
+.input-container {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%); // 정중앙에 위치
+  width: 70%; // 전체화면에 대한 너비
+  
+  input {
+    width: 100%; // container에 대한 너비
+    display: block; // 세로 정렬
+    border-style: none; // 주변 스타일 제거
+    background-color: transparent; //배경 투명하게
     font-size: 30px;
-    font-style: normal;
     font-weight: 800;
-    line-height: normal;
+    border-bottom: 1px solid rgb(255, 255, 255); // input 태그 별 밑줄
+    margin-top: 1.5%; // input 태그 별 margin
+    &::placeholder {
+      // placeholder
+      color: #3d3d3d;
+    }
   }
 
-  .pw-form {
-    display: block;
-    top: 53px;
-  }
-
-  .register-btn {
-    position: relative;
-    top: 105px;
-    width: 261%;
-    height: 69px;
-    flex-shrink: 0;
-    border-radius: 13px;
-    background: #171717;
-    color: #3d3d3d;
-    border-style: none;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
+  .phone-number-container,
+  .pw-container {
+    margin-top: 50px; //container 별 margin
   }
 }
