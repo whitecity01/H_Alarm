@@ -3,7 +3,7 @@ import "../../../styles/auth/RegisterLayout.scss";
 const RegisterLayout = () => {
   return (
     <div className="register-layout-container">
-      <Link className="register-logo" to="/">
+      <Link className="register-back-btn" to="/">
         &lt;
       </Link>
       <span className="register-title">회원가입</span>
