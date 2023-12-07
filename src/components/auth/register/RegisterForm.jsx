@@ -22,8 +22,9 @@ const RegisterForm = () => {
             }}
             placeholder="이메일"
           />
+          <button className="email-verify-request-btn" type="button">인증번호 발송</button>
           <input
-            className="email-verfiy-form"
+            className="email-verify-form"
             type="text"
             value={emailVerifyCode}
             onChange={(e) => {
@@ -43,6 +44,7 @@ const RegisterForm = () => {
             }}
             placeholder="전화번호"
           />
+          <button className="phone-number-verify-request-btn" type="button">인증번호 발송</button>
           <input
             className="verify-code-form"
             type="text"
@@ -75,7 +77,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        <button type="submit" className="login-btn">
+        <button type="submit" className="register-btn">
           확인
         </button>
       </div>
