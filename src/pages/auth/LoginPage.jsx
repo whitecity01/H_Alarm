@@ -18,8 +18,8 @@ export const action = async ({ request }) => {
   const data = await request.formData();
 
   const authForm = {
-    id: data.get("id"),
-    password: data.get("pw"),
+    id: data.get("id-form"),
+    password: data.get("pw-form"),
   };
 
   const res = await requestLogin(authForm);
