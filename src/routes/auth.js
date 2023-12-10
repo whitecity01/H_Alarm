@@ -1,5 +1,7 @@
 import LoginPage, { action as loginAction } from "../pages/auth/LoginPage";
-import RegisterPage from "../pages/auth/RegisterPage";
+import RegisterPage, {
+  action as registerAction,
+} from "../pages/auth/RegisterPage";
 import StartPage from "../pages/auth/Startpage";
 
 const auth = [
@@ -15,6 +17,7 @@ const auth = [
   {
     path: "register",
     element: <RegisterPage />,
+    action: registerAction,
   },
 ];
 
