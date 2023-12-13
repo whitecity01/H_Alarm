@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { Form } from "react-router-dom";
 import "../../../styles/auth/RegisterForm.scss";
+import { emailVerify, phoneNumberVerify } from "../../../services/auth/auth";
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [emailVerifyCode, setEmailVerifyCode] = useState("");
   const [phoneVerifyCode, setPhoneVerifyCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const [pw, setPw] = useState("");
   const [pwCheck, setPwCheck] = useState("");
+
+  const requestEmailVerify = async (data) => {
+    const res = await emailVerify(data);
+    console.log(res);
+  };
+  const requestPhoneNumberVerify = async (data) => {
+    const res = await phoneNumberVerify(data);
+    console.log(res);
+  };
+
   return (
     <Form method="post">
       <div className="input-container">
@@ -22,7 +32,11 @@ const RegisterForm = () => {
             }}
             placeholder="이메일"
           />
-          <button className="email-verify-request-btn" type="button">
+          <button
+            className="email-verify-request-btn"
+            type="button"
+            onClick={requestEmailVerify}
+          >
             인증번호 발송
           </button>
           <input
@@ -34,7 +48,11 @@ const RegisterForm = () => {
             }}
             placeholder="인증번호 입력"
           />
-          <button className="email-verify-btn" type="button">
+          <button
+            className="email-verify-btn"
+            type="button"
+            onClick={requestPhoneNumberVerify}
+          >
             인증번호 확인
           </button>
         </div>
