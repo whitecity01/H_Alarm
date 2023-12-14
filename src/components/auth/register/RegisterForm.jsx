@@ -36,6 +36,7 @@ const RegisterForm = () => {
       <div className="input-container">
         <div className="email-container">
           <input
+            name="email-form"
             className="email-form"
             type="text"
             value={email}
@@ -71,6 +72,7 @@ const RegisterForm = () => {
 
         <div className="phone-number-container">
           <input
+            name="phone-number-form"
             className="phone-number-form"
             type="text"
             value={phoneNumber}
@@ -98,6 +100,7 @@ const RegisterForm = () => {
 
         <div className="pw-container">
           <input
+            name="pw-form"
             className="pw-form"
             type="password"
             value={pw}
