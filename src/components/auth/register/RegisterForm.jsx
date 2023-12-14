@@ -5,22 +5,34 @@ import { emailVerify, phoneNumberVerify } from "../../../services/auth/auth";
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [emailVerifyCode, setEmailVerifyCode] = useState("");
-  const [phoneVerifyCode, setPhoneVerifyCode] = useState("");
+  const [isEmailVerify, setIsEmailVerify] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneVerifyCode, setPhoneVerifyCode] = useState("");
+  const [isPhoneNumberVerify, setIsPhoneNumberVerify] = useState(false);
   const [pw, setPw] = useState("");
   const [pwCheck, setPwCheck] = useState("");
 
   const requestEmailVerify = async (data) => {
     const res = await emailVerify(data);
-    console.log(res);
+    if (res === 200) {
+      setIsEmailVerify(true);
+    }
   };
   const requestPhoneNumberVerify = async (data) => {
     const res = await phoneNumberVerify(data);
-    console.log(res);
+    if (res === 200) {
+      setIsPhoneNumberVerify(true);
+    }
+  };
+
+  const isVerify = () => {
+    if (isEmailVerify === false || isPhoneNumberVerify === false) {
+      return;
+    }
   };
 
   return (
-    <Form method="post">
+    <Form method="post" onSubmit={isVerify}>
       <div className="input-container">
         <div className="email-container">
           <input
