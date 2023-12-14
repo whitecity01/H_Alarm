@@ -9,6 +9,7 @@ const LoginForm = () => {
       <div className="login-form" >
         <div className="input-wrapper id-input">
           <input
+            name="id-form"
             className="id-form"
             type="text"
             value={id}
@@ -20,6 +21,7 @@ const LoginForm = () => {
         </div>
         <div className="input-wrapper pw-input">
           <input
+            name="pw-form"
             className="pw-form"
             type="password"
             value={pw}
