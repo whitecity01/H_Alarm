@@ -1,53 +1,82 @@
 @media (min-width: 1200px){
-    .alarm{
+    .alarm-item{
+        width:380px;
+        padding:5px;
+        margin-bottom: 5px;
         border-radius: 10px;
-        width: 750px;
-        height: 200px;
-        margin-bottom: 20px;
+        & > div{
+            & > :nth-child(1){
+                width:150px;
+                :nth-child(1){
+                    transform: translate(0px, -8px);
+                    font-size:20px;
+                }
+                :nth-child(2){
+                    font-size:45px;
+                }
+            }
+            & > :nth-child(2){
+                width:150px;
+            }
+            & > :nth-child(3){
+                & > p{
+                    margin-left: 10px;
+                    font-size:16px;
+                }
+            }
+        }
+        & > div:first-child{
+            .circle{
+                width: 10px;
+                height: 10px;
+            }
+        }
     }
 }
 
-.hide{
-    display:none;
-}
-.alarm{
-    border: 1px solid black;
+.alarm-item{
+    cursor: pointer;
+    background-color: #171717;
+    display:flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left:auto;
-    margin-right:auto;
-    display:flex;
-    .delete{
-        text-align: center;
-        width:15%;
-        font-size:5em;
+    p{
+        margin:0px;
+        padding:0px;
     }
-    .main{
-        display:flex;
-        justify-content: center;
+    & > div{
+        display: flex;
         align-items: center;
-        width:70%;
-        div:nth-child(1){
+        & > :nth-child(1){
             display:flex;
-            justify-content: center;
+            :nth-child(1){
+                margin-top:auto;
+            }
+            :nth-child(2){
+                margin-top:auto;
+            }
+        }
+        & > :nth-child(2){
+            display:flex;
+            flex-direction: column;
             align-items: center;
-            font-size:7em;
-            padding: 0% 5% 0% 5%;
         }
-        div:nth-child(2){
-            font-size:5em;
-            padding: 0% 5% 0% 0%;
-        }
-        div:nth-child(3){
-            font-size:5em;
-        }
-        div:nth-child(4){
-            padding: 0% 0% 0% 5%;
+        & > :nth-child(3){
+            display:flex;
+            align-items: center;
+            .active {
+                color:#ff893b;
+            }
         }
     }
-    .order{
-        text-align: center;
-        width:15%;
-        font-size:5em;
+    & > div:first-child{
+        width:100%;
+        align-items: end;
+        .circle{
+            margin-left:auto;
+            border-radius: 50%;
+            background: #65EC12;
+        }
     }
 }
