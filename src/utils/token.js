@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { json } from "react-router-dom";
-import { userToken } from "@store/auth";
+import { userToken } from "../store/auth";
 
 /**
  * 인증 토큰 데이터를 반환한다.
