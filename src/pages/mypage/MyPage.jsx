@@ -1,9 +1,13 @@
+import MyPageForm from "../../components/mypage/MyPageForm";
+import MyPageLayout from "../../components/mypage/MyPageLayout";
+
 const MyPage = () => {
-    return(
-        <>
-        MYPAGE
-        </>
-    )
-}
+  return (
+    <>
+      <MyPageLayout />
+      <MyPageForm />
+    </>
+  );
+};
 
 export default MyPage;
