@@ -1,6 +1,6 @@
-import Logo from "../../../commons/Logo";
-import AuthNav from "./AuthNav";
-import "../../../styles/auth/StartForm.scss";
+import Logo from "commons/Logo";
+import AuthNav from "components/auth/start/AuthNav";
+import "styles/auth/StartForm.scss";
 const StartForm = () => {
   return (
     <div className="start-form">
