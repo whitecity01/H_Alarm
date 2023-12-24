@@ -1,101 +1,66 @@
 import classNames from 'classnames/bind';
 import { useCallback, useEffect, useState } from 'react';
 
-import AlarmHeader from './AlarmHeader';
 import AlarmItem from './AlarmItem';
 import AddAlarm from './AddAlarm';
-import { readAlarm, deleteAlarm } from '../../api/alarm';
+import AddHeader from './AddHeader';
+import AlarmHeader from './AlarmHeader';
+import useAlarmList from '../../hooks/useAlarmList';
+import { deleteAlarm, updateAlarm, createAlarm } from '../../api/alarm';
+import { boxingAlarmData, getEmptyAlarmData, unBoxingAlarmData } from '../../utils/utils';
 
 import alarmStyle from './alarm.module.scss';
 const style = classNames.bind(alarmStyle);
 
+const form = unBoxingAlarmData(getEmptyAlarmData());
+
+/**
+ * Alarm 컴포넌트. 페이지를 구성하는 컴포넌트. AlarmData를 관리함
+ *  
+ * @returns {JSX.Element} Alarm 컴포넌트를 렌더링
+ */
 const Alarm = () => {
-    const [isEdit, setIsEdit] = useState(false);
     const [isAddAlarm, setIsAddAlarm] = useState(false);
-    const [alarms, setAlarms] = useState([
-        {
-            alarmId: "1",
-            date: 1694872081120,
-            week: [0,2,3,6],
-            time: 108000000,
-            repeat: true,
-            name: "test",
-            method: "email",
-            message:"testtesttest",
-        },
-        {
-            alarmId: "2",
-            date: 1694872081120,
-            week: [0,2,3,6],
-            time: 122134122,
-            repeat: true,
-            name: "test",
-            method: "call",
-            message:"testtesttest",
-        },
-        {
-            alarmId: "3",
-            date: 1694872081120,
-            week: [0,2,3,6],
-            time: 1231243,
-            repeat: true,
-            name: "test",
-            method: "email",
-            message:"testtesttest",
-        },
-        {
-            alarmId: "4",
-            date: 1694872081120,
-            week: [0,2,3,6],
-            time: 123123443,
-            repeat: true,
-            name: "test",
-            method: "email",
-            message:"testtesttest",
-        }
-    ]);
-
-    useEffect(()=>{
-        (async()=>{
-            try{
-                //setAlarms(await readAlarm());
-                await readAlarm();
-            }catch(e){
-                alert(e);
-            }
-        })();
-    },[]);
-
-    const _setIsAddAlarm = useCallback((func) => {
-        setIsEdit(false);
-        setIsAddAlarm(func);
-    },[]);
-
-    const _deleteAlarm = async(alarmId) => {
+    const [alarmSelected, setAlarmSelected] = useState(null);
+    const [alarms, setAlarmList] = useAlarmList(null);
+    const saveAlarm = async(data)=> {
         try{
+            const dt = boxingAlarmData(data)
+            if (dt.alarmId !== null) {
+                await updateAlarm(dt);
+            }else{
+                await createAlarm(dt);
+            }
+            setAlarmList(dt.alarmId);
+        }catch(err){
+            alert(err);
+        }
+    }
+    const _deleteAlarm = async (alarmId) => {
+        try {
             await deleteAlarm(alarmId);
-            //setAlarms(await readAlarm());
-        }catch(e){
+            setAlarmList(alarmId);
+        } catch (e) {
             alert(e);
         }
     }
+    const Header = () => isAddAlarm ? <AddHeader setIsAddAlarm={setIsAddAlarm}/> : <AlarmHeader setIsAddAlarm={setIsAddAlarm}/>;
+    const Alarms = () => alarms.map((alarm) => <AlarmItem setAlarmSelected={setAlarmSelected} key={alarm.alarmId} data={alarm} isEdit={alarm.alarmId === alarmSelected} remove={() => { _deleteAlarm(alarm.alarmId) }} />)
 
-    const Alarms = ()=>alarms.map((alarm)=> <AlarmItem key={alarm.alarmId} data={alarm} isEdit={isEdit} remove={()=>{_deleteAlarm(alarm.alarmId)}} />)
+    const data = isAddAlarm ? form : alarmSelected ? alarms.filter((v)=>v.alarmId === alarmSelected)[0]: form;
 
-    if (isAddAlarm){
-        return(
-            <AddAlarm setIsAddAlarm={setIsAddAlarm}/>
-        )
-    }
-    return(
-        <>
-            <AlarmHeader isEdit={isEdit} setIsEdit={setIsEdit} setIsAddAlarm={_setIsAddAlarm}/>
+    return (
+        <div className={style('wrap')}>
             <div className={style('container')}>
-                <div className={style('alarm-list')}>
-                    <Alarms/>
+                <Header/>
+                <div className={style('body')}>
+                    <AddAlarm alarmData={data} save={saveAlarm} remove={_deleteAlarm}/>
+                    <div className={style('alarm-list')}>
+                        <Alarms/>
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -1,43 +1,59 @@
 import classNames from 'classnames/bind';
-
-import {getTime} from '../../utils/utils';
+import { useCallback } from 'react';
 
 import alarmItemStyle from './alarmItem.module.scss';
 const style = classNames.bind(alarmItemStyle);
 
-const AlarmItem = ({isEdit, data, remove}) => {
-    const time = getTime(data.time);
-    const method = data.method === "email" ? "E": data.method === "call" ? "C" : "M";
-    // const alarmId = data.alarmId;
-    // const date = getDate(data.date);
-    // const week = getWeek(data.week);
-    // const repeat = data.repeat;
-    // const name = data.name;
-    // const message = data.message;
+/**
+ * AlarmItem 컴포넌트. 페이지 우측 위치. AlarmData를 보여주는 기능을 함
+ *  
+ * @param {Object} param - AlarmItem 컴포넌트의 props
+ * @param {Boolean} param.isEdit -
+ * @param {Object} param.data - 가공된 alarmData
+ * @param {Function} param.remove - 
+ * @param {Function} param.setAlarmSelected - AlarmItem이 클릭될 때 수행할 이벤트 함수
+ * @returns {JSX.Element} AlarmItem 컴포넌트를 렌더링
+ */
+const AlarmItem = ({isEdit, data, remove, setAlarmSelected}) => {
+
+    const Date = ({date}) => {
+        const dt = date ? `${date.year}-${date.month}-${date.day}` : date.day.join(" ");
+        return(
+            <>{dt}</>
+        );
+    }
+
+    const _setAlarmSelected = useCallback(() => {
+        setAlarmSelected(data.alarmId);
+    },[data.alarmId, setAlarmSelected]);
 
     return(
-        <div className={style('alarm')}>
-            <div className={style('delete', {hide:!isEdit})}>
-                <span onClick={remove}>-</span>
+        <div className={style('alarm-item')} onClick={_setAlarmSelected}>
+            <div>
+                <div className={style('circle')}></div>
             </div>
-            <div className={style('main')}>
+            <div>
                 <div>
-                    <span>{time.hour}</span>
-                    <span>:</span>
-                    <span>{time.minute}</span>
+                    <p>
+                        {data.time.isAm ? "오전" : "오후" }
+                    </p>
+                    <p>
+                        {data.time.hour}:{data.time.minute}
+                    </p>
                 </div>
                 <div>
-                    <span>{time.format}</span>
+                    <p>
+                        {data.name}
+                    </p>
+                    <p>
+                        <Date date={data.date}/>
+                    </p>
                 </div>
                 <div>
-                    <span>{method}</span>
+                    <p className={style({active: data.method === "E"})}>E</p>
+                    <p className={style({active: data.method === "C"})}>C</p>
+                    <p className={style({active: data.method === "M"})}>M</p>
                 </div>
-                <div>
-                    <input type="checkbox" />
-                </div>
-            </div>
-            <div className={style('order', {hide:!isEdit})}>
-                <span>=</span>
             </div>
         </div>
     )
