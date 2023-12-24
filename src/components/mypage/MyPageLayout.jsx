@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../../styles/mypage/MyPageLayout.scss";
+import "styles/mypage/MyPageLayout.scss";
 
 const MyPageLayout = () => {
   return (

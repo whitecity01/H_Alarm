@@ -1,14 +1,16 @@
-import { createBrowserRouter } from 'react-router-dom';
-import RootLayout from '../pages/RootLayout';
-import ErrorPage from '../pages/ErrorPage';
-import auth from './auth';
-import alarm from './alram';
+import { createBrowserRouter } from "react-router-dom";
+import RootLayout from "pages/RootLayout";
+import ErrorPage from "pages/ErrorPage";
+import auth from "routes/auth";
+import alarm from "routes/alram";
 
-const router = createBrowserRouter([{
-    path: '/',
-  element: <RootLayout />,
-  errorElement: <ErrorPage />,
-  children: [...auth, ...alarm],
-}]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [...auth, ...alarm],
+  },
+]);
 
 export default router;

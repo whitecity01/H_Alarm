@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Form } from "react-router-dom";
-import "../../../styles/auth/LoginForm.scss";
+import "styles/auth/LoginForm.scss";
 const LoginForm = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   return (
     <Form method="post">
-      <div className="login-form" >
+      <div className="login-form">
         <div className="input-wrapper id-input">
           <input
             name="id-form"

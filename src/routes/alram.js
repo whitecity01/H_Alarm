@@ -1,5 +1,5 @@
-import AlarmPage from "../pages/alram/AlarmPage";
-import MyPage from "../pages/mypage/MyPage";
+import AlarmPage from "pages/alram/AlarmPage";
+import MyPage from "pages/mypage/MyPage";
 
 const alarm = [
   {

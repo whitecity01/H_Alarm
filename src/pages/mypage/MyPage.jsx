@@ -1,5 +1,5 @@
-import MyPageForm from "../../components/mypage/MyPageForm";
-import MyPageLayout from "../../components/mypage/MyPageLayout";
+import MyPageForm from "components/mypage/MyPageForm";
+import MyPageLayout from "components/mypage/MyPageLayout";
 
 const MyPage = () => {
   return (
