@@ -1,16 +1,16 @@
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { useCallback, useEffect, useState } from 'react';
 
-import AlarmItem from './AlarmItem';
-import AddAlarm from './AddAlarm';
-import AddHeader from './AddHeader';
-import AlarmHeader from './AlarmHeader';
+import AlarmListForm from './form/AlarmListForm';
+import AddAlarmForm from './form/AddAlarmForm';
+import HeaderForm from './form/HeaderForm';
 import useAlarmList from '../../hooks/useAlarmList';
-import { deleteAlarm, updateAlarm, createAlarm } from '../../api/alarm';
-import { boxingAlarmData, getEmptyAlarmData, unBoxingAlarmData } from '../../utils/utils';
+import { deleteAlarm, updateAlarm, createAlarm } from '../../services/alarm/alarm';
+import { boxingAlarmData, getEmptyAlarmData, unBoxingAlarmData } from '../../utils/alarm';
 
-import alarmStyle from './alarm.module.scss';
-const style = classNames.bind(alarmStyle);
+import alarmLayoutStyle from '../../styles/alarm/alarmLayout.module.scss';
+
+const style = classNames.bind(alarmLayoutStyle);
 
 const form = unBoxingAlarmData(getEmptyAlarmData());
 
@@ -19,10 +19,11 @@ const form = unBoxingAlarmData(getEmptyAlarmData());
  *  
  * @returns {JSX.Element} Alarm 컴포넌트를 렌더링
  */
-const Alarm = () => {
+const AlarmLayout = () => {
     const [isAddAlarm, setIsAddAlarm] = useState(false);
-    const [alarmSelected, setAlarmSelected] = useState(null);
     const [alarms, setAlarmList] = useAlarmList(null);
+    const [alarmSelected, setAlarmSelected] = useState(null);
+
     const saveAlarm = async(data)=> {
         try{
             const dt = boxingAlarmData(data)
@@ -36,6 +37,7 @@ const Alarm = () => {
             alert(err);
         }
     }
+
     const _deleteAlarm = async (alarmId) => {
         try {
             await deleteAlarm(alarmId);
@@ -44,24 +46,29 @@ const Alarm = () => {
             alert(e);
         }
     }
-    const Header = () => isAddAlarm ? <AddHeader setIsAddAlarm={setIsAddAlarm}/> : <AlarmHeader setIsAddAlarm={setIsAddAlarm}/>;
-    const Alarms = () => alarms.map((alarm) => <AlarmItem setAlarmSelected={setAlarmSelected} key={alarm.alarmId} data={alarm} isEdit={alarm.alarmId === alarmSelected} remove={() => { _deleteAlarm(alarm.alarmId) }} />)
+
+    useEffect(()=>{
+        if(alarms.length === 0){
+            setIsAddAlarm(true);
+        }else{
+            setIsAddAlarm(false);
+            setAlarmSelected(alarms[0].alarmId);
+        }
+    },[alarms, setAlarmSelected, setIsAddAlarm]);
 
     const data = isAddAlarm ? form : alarmSelected ? alarms.filter((v)=>v.alarmId === alarmSelected)[0]: form;
 
     return (
         <div className={style('wrap')}>
             <div className={style('container')}>
-                <Header/>
+                <HeaderForm isAddAlarm={isAddAlarm} setIsAddAlarm={setIsAddAlarm}/>
                 <div className={style('body')}>
-                    <AddAlarm alarmData={data} save={saveAlarm} remove={_deleteAlarm}/>
-                    <div className={style('alarm-list')}>
-                        <Alarms/>
-                    </div>
+                    <AddAlarmForm alarmData={data} save={saveAlarm} remove={_deleteAlarm}/>
+                    <AlarmListForm alarms={alarms} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Alarm;
+export default AlarmLayout;

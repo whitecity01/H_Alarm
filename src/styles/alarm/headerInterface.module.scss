@@ -26,16 +26,21 @@
     display:flex;
     .left{
         width:33.333%;
-        span{
+        div{
             position:absolute;
-            color:#ff893b;
-            //transform:translate(0px, 0px);
+            float:left;
+            cursor:pointer;
+            span{
+                color:#ff893b;
+                //transform:translate(0px, 0px);
+            }
         }
     }
     .center{
         width:33.333%;
         text-align: center;
         .logo{
+            cursor: pointer;
             margin:0;
             :nth-child(2){
                 color:#ff893b;
@@ -44,11 +49,15 @@
     }
     .right{
         width:33.333%;
-        .circle{
-            margin-left:auto;
-            border: 1px solid white;
-            border-radius: 50%;
-            background: #fff;
+        div{
+            float:right;
+            cursor:pointer;
+            .circle{
+                margin-left:auto;
+                border: 1px solid white;
+                border-radius: 50%;
+                background: #fff;
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 
-import useAlarmData from '../../hooks/useAlarmData';
+import useAlarmData from '../../../hooks/useAlarmData';
 
-import addAlarmStyle from './addAlarm.module.scss';
+import addAlarmStyle from '../../../styles/alarm/addAlarmForm.module.scss';
 const style = classNames.bind(addAlarmStyle);
 
 /**
@@ -14,7 +14,7 @@ const style = classNames.bind(addAlarmStyle);
  * @param {Function} param.remove - 삭제 버튼을 누를때 수행할 함수
  * @returns {JSX.Element} AddAlarm 컴포넌트를 렌더링
  */
-const AddAlarm = ({alarmData, save, remove}) => {
+const AddAlarmForm = ({alarmData, save, remove}) => {
     const [data, setData] = useAlarmData(alarmData);
 
     const inputTime = ({target}) => {
@@ -57,9 +57,7 @@ const AddAlarm = ({alarmData, save, remove}) => {
         }
     }
 
-    const selectMethod = ({target}) => {
-        setData({method: target.name});
-    }
+    const selectMethod = ({target}) => setData({method: target.name});
 
     const inputDate = ({target}) => {
         const regex = /^\d*$/; 
@@ -85,17 +83,11 @@ const AddAlarm = ({alarmData, save, remove}) => {
         }
     }
 
-    const inputName = ({target}) => {
-        setData({name: target.value});
-    }
+    const inputName = ({target}) => setData({name: target.value});
 
-    const _save = ()=>{
-        save(data);
-    }
+    const _save = ()=> save(data);
 
-    const _remove = ()=>{
-        remove(data.alarmId);
-    }
+    const _remove = ()=> remove(data.alarmId);
 
     const TrashCan = ()=>data.alarmId ? <img
         onClick={_remove}
@@ -183,4 +175,4 @@ const AddAlarm = ({alarmData, save, remove}) => {
     )
 }
 
-export default AddAlarm;
+export default AddAlarmForm;

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 /**
  * 유닉스 시간을 받아 날짜를 포함하는 객체로 만들어서 반환
  * @param {Number} date 
@@ -69,33 +67,6 @@ export const getDay = (week) => {
 };
 
 /**
- * axios에 사용되는 형식
- * @param {String} url 
- * @param {Object} form 
- * @returns {Object} reponse한 data 객체 반환
- */
-export const axiosForm = async(url, form) => {
-    const response = await axios.post(url, form,{
-            withCredentials: true,
-            headers:{
-                "Content-Type": `application/json`,
-            }    
-        }
-    )
-
-    switch(response.status){
-        case 200:
-            return response.data;
-        case 400:
-            throw new Error("잘못된 입력");
-        case 401:
-            throw new Error("중복된 입력");
-        default:
-            throw new Error(`서버 에러: ${response.status}`);
-    }
-}
-
-/**
  * 웹에서 사용하는 데이터를 서버에 전송하기 위한 모양으로 변경
  * @param {Object} data 가공된 데이터 
  * @returns {Object} 압축된 데이터
@@ -141,4 +112,8 @@ export const getEmptyAlarmData = () => {
         method: "email",
         message: "",
     }
+}
+
+export const dateToString = (date)=>{
+    return date ? `${date.year}-${date.month}-${date.day}` : date.day.join(" ");
 }

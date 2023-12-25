@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { unBoxingAlarmData } from '../utils/utils';
-import { readAlarm } from '../api/alarm';
+import { unBoxingAlarmData } from '../utils/alarm';
+import { readAlarm } from '../services/alarm/alarm';
 
 const rda = async alarmId=>(await readAlarm(alarmId)).map(data=>unBoxingAlarmData(data));
 

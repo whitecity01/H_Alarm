@@ -6,6 +6,7 @@
         height: 360px;
         margin: 20px;
         & > :nth-child(1){
+            height: 35px;
             img{
                 margin-top: 10px;
                 margin-right: 10px;
@@ -75,6 +76,7 @@
         justify-content: right;
         flex-direction:row-reverse;
         img{
+            cursor:pointer;
             object-fit:cover;
         }
     }

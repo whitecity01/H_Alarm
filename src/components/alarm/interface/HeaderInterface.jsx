@@ -1,5 +1,8 @@
+
+import { useNavigate } from 'react-router-dom';
+
 import classNames from 'classnames/bind';
-import headerStyle from './header.module.scss';
+import headerStyle from '../../../styles/alarm/headerInterface.module.scss';
 const style = classNames.bind(headerStyle);
 
 /**
@@ -12,27 +15,31 @@ const style = classNames.bind(headerStyle);
  * @param {Function} param.rightClick - 오른쪽 영역이 클릭될 때 호출되는 함수
  * @returns {JSX.Element} Header 컴포넌트를 렌더링
  */
-const Header = ({left, right, leftClick, rightClick}) => {
-
+const HeaderInterface = ({left, right, leftClick, rightClick}) => {
+    const navigate = useNavigate();
     const RightBox = () => right ? <span>{right}</span> : <div className={style('circle')}/>;
 
     return(
         <div className={style('header')}>
-            <div className={style('left')} onClick={leftClick}>
-                <span>{left}</span>
+            <div className={style('left')} >
+                <div onClick={leftClick}>
+                    <span>{left}</span>
+                </div>
             </div>
             <div className={style('center')}>
-                <p className={style('logo')}>
+                <p className={style('logo')} onClick={()=>navigate("/")}>
                     <span>G</span>
                     <span>F</span>
                     <span>UP</span>
                 </p>
             </div>
             <div className={style('right')} /*onclick={rightClick}*/>
-                <RightBox/>
+                <div onClick={rightClick}>
+                    <RightBox/>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Header;
+export default HeaderInterface;

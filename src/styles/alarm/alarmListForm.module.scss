@@ -1,0 +1,14 @@
+@media (min-width: 1200px){
+    .alarm-list{
+        width:380px;
+        margin-top: 20px;
+        margin-right: 20px;
+    }
+}
+
+
+
+.alarm-list{
+    display:flex;
+    flex-direction: column;
+}

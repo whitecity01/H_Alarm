@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import { useCallback } from 'react';
 
-import alarmItemStyle from './alarmItem.module.scss';
-const style = classNames.bind(alarmItemStyle);
+import alarmItemFormStyle from '../../../styles/alarm/alarmItemForm.module.scss';
+import { dateToString } from '../../../utils/alarm';
+const style = classNames.bind(alarmItemFormStyle);
 
 /**
  * AlarmItem 컴포넌트. 페이지 우측 위치. AlarmData를 보여주는 기능을 함
@@ -14,14 +15,9 @@ const style = classNames.bind(alarmItemStyle);
  * @param {Function} param.setAlarmSelected - AlarmItem이 클릭될 때 수행할 이벤트 함수
  * @returns {JSX.Element} AlarmItem 컴포넌트를 렌더링
  */
-const AlarmItem = ({isEdit, data, remove, setAlarmSelected}) => {
+const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
 
-    const Date = ({date}) => {
-        const dt = date ? `${date.year}-${date.month}-${date.day}` : date.day.join(" ");
-        return(
-            <>{dt}</>
-        );
-    }
+    const Date = ({date}) => <>{dateToString(date)}</>
 
     const _setAlarmSelected = useCallback(() => {
         setAlarmSelected(data.alarmId);
@@ -59,4 +55,4 @@ const AlarmItem = ({isEdit, data, remove, setAlarmSelected}) => {
     )
 }
 
-export default AlarmItem;
+export default AlarmItemForm;

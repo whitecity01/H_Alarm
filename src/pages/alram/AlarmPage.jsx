@@ -1,10 +1,8 @@
-const AlarmPage = () => {
+import AlarmLayout from "../../components/alarm/AlarmLayout";
 
-    return(
-        <>
-        ALARM PAGE
-        </>
-    )
+
+const AlarmPage = () => {
+    return <AlarmLayout />
 }
 
 export default AlarmPage;

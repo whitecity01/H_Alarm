@@ -1,4 +1,31 @@
-import { axiosForm } from "../utils/utils";
+import axios from "axios";
+
+/**
+ * axios에 사용되는 형식
+ * @param {String} url 
+ * @param {Object} form 
+ * @returns {Object} reponse한 data 객체 반환
+ */
+export const axiosForm = async(url, form) => {
+    const response = await axios.post(url, form,{
+            withCredentials: true,
+            headers:{
+                "Content-Type": `application/json`,
+            }    
+        }
+    )
+
+    switch(response.status){
+        case 200:
+            return response.data;
+        case 400:
+            throw new Error("잘못된 입력");
+        case 401:
+            throw new Error("중복된 입력");
+        default:
+            throw new Error(`서버 에러: ${response.status}`);
+    }
+}
 
 export const createAlarm = async({date, day, time, repeat, name, method, message}) => {
 
