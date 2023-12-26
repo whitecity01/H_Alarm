@@ -1,3 +1,5 @@
+import { CREATE_NEW_ALARM } from "../constants/alarm";
+
 /**
  * 유닉스 시간을 받아 날짜를 포함하는 객체로 만들어서 반환
  * @param {Number} date 
@@ -22,7 +24,6 @@ export const getTime = (time) => {
     const timeObj = {
         hour: dt.getHours(),
         minute: dt.getMinutes(),
-        second: dt.getSeconds()
     };
     const isAm = timeObj.hour < 12 ? 
     true : 
@@ -33,7 +34,6 @@ export const getTime = (time) => {
     return {
         hour: timeObj.hour.toString().padStart(2, " "), 
         minute: timeObj.minute.toString().padStart(2, "0"), 
-        second: timeObj.second.toString().padStart(2, "0"), 
         isAm
     };
 };
@@ -72,7 +72,7 @@ export const getDay = (week) => {
  * @returns {Object} 압축된 데이터
  */
 export const boxingAlarmData = (data) => {
-    const time = (new Date(1970, 0, 1 ,data.time.hour+9,data.time.minute)).getTime();
+    const time = (new Date(1970, 0, 1 ,data.time.hour+9+(data.time.isAm ? 0 : 12),data.time.minute)).getTime();
     const method = data.method === "E" ? "email" : data.method === "C" ? "call" : "message";
     const date = data.day.length === 0 ? (new Date(data.date.year, data.date.month -1,data.date.day)).getTime() : null;
     const day = data.day.length === 0 ? null : data.day;
@@ -103,7 +103,7 @@ export const unBoxingAlarmData = (data) =>{
  */
 export const getEmptyAlarmData = () => {
     return {
-        alarmId: null,
+        alarmId: CREATE_NEW_ALARM,
         date: 0,
         day: [],
         time: 0,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ALL_LOADED_ALARM } from '../../constants/alarm';
 
 /**
  * axios에 사용되는 형식
@@ -29,9 +30,7 @@ export const axiosForm = async(url, form) => {
 
 export const createAlarm = async({date, day, time, repeat, name, method, message}) => {
 
-    if (!(date ^ day)){
-        throw new Error("Only one of date and day must have a value");
-    }else if(!time|| !name || !method /*|| !message*/){
+    if(!time|| !name || !method /*|| !message*/){
         throw new Error("All fields cannot be null");
     }
 
@@ -48,7 +47,7 @@ export const createAlarm = async({date, day, time, repeat, name, method, message
 }
 
 export const readAlarm = async(alarmId) => {
-    if (alarmId === null){
+    if (alarmId === ALL_LOADED_ALARM){
         return [
                 {
                     alarmId: "1",
@@ -97,13 +96,15 @@ export const readAlarm = async(alarmId) => {
 
 export const updateAlarm = async({alarmId, date, day, time, repeat, name, method, message}) => {
 
-    if (date !==null && day!==null){
-        throw new Error("Only one of date and day must have a value");
-    }else if(alarmId === null){
-        throw new Error("alarmId cannot be null");
-    }else if(!date && !day && !time && !repeat && !name && !method && !message){
-        throw new Error("Value to modify does not exist");
-    };
+    // if(alarmId === null){
+    //     throw new Error("alarmId cannot be null");
+    // }else if(!date && !day && !time && !repeat && !name && !method && !message){
+    //     throw new Error("Value to modify does not exist");
+    // };
+
+    if(!time|| !name || !method /*|| !message*/){
+        throw new Error("All fields cannot be null");
+    }
 
     const form = {
         alarmId,
@@ -119,8 +120,8 @@ export const updateAlarm = async({alarmId, date, day, time, repeat, name, method
 }
 
 export const deleteAlarm = async(alarmId) => {
-    if(alarmId === null){
-        throw new Error("alarmId cannot be null");
+    if(alarmId < 0){
+        throw new Error("alarmId cannot be negative");
     }
     return await axiosForm(process.env.REACT_APP_SERVER_URL+"/alarm/delete", {alarmId});
 }

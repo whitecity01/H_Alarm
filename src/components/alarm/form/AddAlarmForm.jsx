@@ -1,7 +1,9 @@
 
-import useAlarmData from '../../../hooks/useAlarmData';
+import { Form } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import '../../../styles/alarm/addAlarmForm.scss';
+import { CREATE_NEW_ALARM } from "../../../constants/alarm";
 
 /**
  * AddAlarm 컴포넌트. 페이지 좌측에 위치. AlarmData의 수정 및 저장, 삭제 기능을 함
@@ -12,33 +14,43 @@ import '../../../styles/alarm/addAlarmForm.scss';
  * @param {Function} param.remove - 삭제 버튼을 누를때 수행할 함수
  * @returns {JSX.Element} AddAlarm 컴포넌트를 렌더링
  */
-const AddAlarmForm = ({alarmData, save, remove}) => {
-    const [data, setData] = useAlarmData(alarmData);
+const AddAlarmForm = ({ alarmData }) => {
+    const [alarmId, setAlarmId] = useState(alarmData.alarmId);
+    const [time, setTime] = useState(alarmData.time);
+    const [method, setMethod] = useState(alarmData.method);
+    const [date, setDate] = useState(alarmData.date);
+    const [day, setDay] = useState(alarmData.day);
+    //const [repeat, setRepeat] = useState(alarmData.repeat);
+    const [name, setName] = useState(alarmData.name);
+    //const [message, setMessage] = useState(alarmData.message);
 
-    const inputTime = ({target}) => {
+    const timeSelect = ({target})=>{
         switch (target.name){
             case "am":
-                setData({time: {...data.time,isAm:true}});
+                setTime({...time,isAm:true});
                 return;
             case "pm":
-                setData({time: {...data.time,isAm:false}});
+                setTime({...time,isAm:false});
                 return;
             default:
                 break;
         }
-        const regex = /^\d*$/; 
+    }
+
+    const inputTime = ({target}) => {
+        const regex = /^[ \d]*$/; 
         if(!regex.test(target.value)){
             return;
         }
-        const t = Number(target.value);
+        const t = target.value.replace(/\sg/,'') === '' ? 0 : Number(target.value);
         switch(target.name){
             case "hour":
                 const hour = t > 12 ? 12 : t;
-                setData({time: {...data.time,hour}});
+                setTime({...time,hour});
                 return;
             case "minute":
                 const minute = t > 59 ? 59 : t;
-                setData({time: {...data.time,minute:String(minute).padStart(2,'0')}});
+                setTime({...time,minute:String(minute).padStart(2,'0')});
                 return;
             default:
                 return;
@@ -46,67 +58,76 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
     }
 
     const inputDay = ({target}) => {
-        const n = Number(target.name);
-        setData({date: {year:"0000", month:"00", day:"00"}})
-        if(data.day.includes(n)){
-            setData({day: data.day.filter(d => d !== n)});
+        const n = target.name;
+        if(day.includes(n)){
+            setDay(day.filter(d => d !== n));
         }else{
-            setData({day : [...data.day, n]});
+            setDay([...day, n]);
         }
     }
 
-    const selectMethod = ({target}) => setData({method: target.name});
+    const selectMethod = ({target}) => setMethod(target.name);
 
     const inputDate = ({target}) => {
-        const regex = /^\d*$/; 
+        const regex = /^[ \d]*$/; 
         if(!regex.test(target.value)){
             return;
         }
-        const t = Number(target.value);
+        const t = target.value.replace(/\sg/,'') === '' ? 0 : Number(target.value);
         switch (target.name) {
             case "year":
                 const year = t > 9999 ? 9999 : t;
-                setData({date: {...data.date, year}, day:[]});
+                setDate({...date, year});
                 break;
             case "month":
                 const month = t > 12 ? 12 : t;
-                setData({date: {...data.date, month: String(month).padStart(2,'0')}, day:[]});
+                setDate({...date, month: String(month).padStart(2,'0')});
                 break;
             case "day":
                 const day = t > 31 ? 31 : t;
-                setData({date: {...data.date, day: String(day).padStart(2,'0')}, day:[]});
+                setDate({...date, day: String(day).padStart(2,'0')});
                 break;
             default:
                 return;
         }
+        setDay([]);
     }
 
-    const inputName = ({target}) => setData({name: target.value});
+    const inputName = ({target}) =>setName(target.value);
+    useEffect(()=>{
+        setAlarmId(alarmData.alarmId);
+        setTime(alarmData.time);
+        setMethod(alarmData.method);
+        setDate(alarmData.date);
+        setDay(alarmData.day);
+        //setRepeat(alarmData.repeat);
+        setName(alarmData.name);
+        //setMessage(alarmData.message);
+    },[alarmData]);
 
-    const _save = ()=> save(data);
-
-    const _remove = ()=> remove(data.alarmId);
-
-    const TrashCan = ()=>data.alarmId ? <img
-        onClick={_remove}
-        src="trash-can-1.png"
-        alt="trash"
-    /> : <></>
+    const TrashCan = ()=>alarmId !== CREATE_NEW_ALARM ? 
+    <button type="submit" name="type" value="remove">
+        <img
+            src="trash-can-1.png"
+            alt="trash"
+        /> 
+    </button>
+    : <></>
 
     return(
-        <div className='addAlarm-form'>
+        <Form method="post" className='addAlarm-form'>
             <div>
                 <TrashCan/>
             </div>
             <div>
                 <div>
-                    <button onClick={inputTime} name="am" className={!data.time.isAm ? "addAlarm-disabled" : ""}>오전</button>
-                    <button onClick={inputTime} name="pm" className={data.time.isAm ? "addAlarm-disabled" : ""}>오후</button>
+                    <button type="button" onClick={timeSelect} name="am" value={time.isAm} className={!time.isAm ? "addAlarm-disabled" : ""}>오전</button>
+                    <button type="button" onClick={timeSelect} name="pm" value={!time.isAm} className={time.isAm ? "addAlarm-disabled" : ""}>오후</button>
                 </div>
                 <div className='addAlarm-time'>
-                    <span><input type="text" value={data.time.hour} onChange={inputTime} name="hour" /></span>
+                    <span><input type="text" value={time.hour} onChange={inputTime} name="hour" /></span>
                     <span>:</span>
-                    <span><input type="text" value={data.time.minute} onChange={inputTime} name="minute" /></span>
+                    <span><input type="text" value={time.minute} onChange={inputTime} name="minute" /></span>
                 </div>
             </div>
             <div>
@@ -114,13 +135,13 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>반복</span>
                 </div>
                 <div>
-                    <button onClick={inputDay} name="0" className={!data.day.includes(0) ? "addAlarm-disabled" : ""}>일</button>
-                    <button onClick={inputDay} name="1" className={!data.day.includes(1) ? "addAlarm-disabled" : ""}>월</button>
-                    <button onClick={inputDay} name="2" className={!data.day.includes(2) ? "addAlarm-disabled" : ""}>화</button>
-                    <button onClick={inputDay} name="3" className={!data.day.includes(3) ? "addAlarm-disabled" : ""}>수</button>
-                    <button onClick={inputDay} name="4" className={!data.day.includes(4) ? "addAlarm-disabled" : ""}>목</button>
-                    <button onClick={inputDay} name="5" className={!data.day.includes(5) ? "addAlarm-disabled" : ""}>금</button>
-                    <button onClick={inputDay} name="6" className={!data.day.includes(6) ? "addAlarm-disabled" : ""}>토</button>
+                    <button type="button" onClick={inputDay} name="w0" value={day.includes("w0")} className={!day.includes("w0") ? "addAlarm-disabled" : ""}>일</button>
+                    <button type="button" onClick={inputDay} name="w1" value={day.includes("w1")} className={!day.includes("w1") ? "addAlarm-disabled" : ""}>월</button>
+                    <button type="button" onClick={inputDay} name="w2" value={day.includes("w2")} className={!day.includes("w2") ? "addAlarm-disabled" : ""}>화</button>
+                    <button type="button" onClick={inputDay} name="w3" value={day.includes("w3")} className={!day.includes("w3") ? "addAlarm-disabled" : ""}>수</button>
+                    <button type="button" onClick={inputDay} name="w4" value={day.includes("w4")} className={!day.includes("w4") ? "addAlarm-disabled" : ""}>목</button>
+                    <button type="button" onClick={inputDay} name="w5" value={day.includes("w5")} className={!day.includes("w5") ? "addAlarm-disabled" : ""}>금</button>
+                    <button type="button" onClick={inputDay} name="w6" value={day.includes("w6")} className={!day.includes("w6") ? "addAlarm-disabled" : ""}>토</button>
                 </div>
             </div>
             <div>
@@ -128,11 +149,11 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>수단</span>
                 </div>
                 <div>
-                    <button onClick={selectMethod} name="E" className={!(data.method==="E") ? "addAlarm-disabled" : ""}>이메일</button>
+                    <button type="button" onClick={selectMethod} name="E" value={method==="E"} className={!(method==="E") ? "addAlarm-disabled" : ""}>이메일</button>
                     <span>|</span>
-                    <button onClick={selectMethod} name="C" className={!(data.method==="C") ? "addAlarm-disabled" : ""}>전화</button>
+                    <button type="button" onClick={selectMethod} name="C" value={method==="C"} className={!(method==="C") ? "addAlarm-disabled" : ""}>전화</button>
                     <span>|</span>
-                    <button onClick={selectMethod} name="M" className={!(data.method==="M") ? "addAlarm-disabled" : ""}>문자</button>
+                    <button type="button" onClick={selectMethod} name="M" value={method==="M"} className={!(method==="M") ? "addAlarm-disabled" : ""}>문자</button>
                 </div>
             </div>
             <div>
@@ -140,11 +161,11 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>날짜</span>
                 </div>
                 <div>
-                    <input type="text" name="year" value={data.date.year} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
+                    <input type="text" name="year" value={date.year} onChange={inputDate} className={!(day.length === 0) ? "addAlarm-disabled" : ""}/>
                     <span>/</span>
-                    <input type="text" name="month" value={data.date.month} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
+                    <input type="text" name="month" value={date.month} onChange={inputDate} className={!(day.length === 0) ? "addAlarm-disabled" : ""}/>
                     <span>/</span>
-                    <input type="text" name="day" value={data.date.day} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
+                    <input type="text" name="day" value={date.day} onChange={inputDate} className={!(day.length === 0) ? "addAlarm-disabled" : ""}/>
                 </div>
             </div>
             <div>
@@ -152,7 +173,7 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>이름</span>
                 </div>
                 <div>
-                    <input placeholder='default alarm name' value={data.name} onChange={inputName}></input>
+                    <input type="text" placeholder='default alarm name' name="name" value={name} onChange={inputName}></input>
                 </div>
             </div>
             <div>
@@ -167,9 +188,12 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                 </div>
             </div>
             <div>
-                <button onClick={_save}>저장</button>
+                <input type="hidden" name="alarmId" value={alarmId} />
+                <input type="hidden" name="repeat" value="true" />
+                <input type="hidden" name="message" value="" />
+                <button type="submit" name="type" value="save" >저장</button>
             </div>
-        </div>
+        </Form>
     )
 }
 

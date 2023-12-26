@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
 import AlarmListForm from './form/AlarmListForm';
 import AddAlarmForm from './form/AddAlarmForm';
 import HeaderForm from './form/HeaderForm';
-import useAlarmList from '../../hooks/useAlarmList';
-import { deleteAlarm, updateAlarm, createAlarm } from '../../services/alarm/alarm';
-import { boxingAlarmData, getEmptyAlarmData, unBoxingAlarmData } from '../../utils/alarm';
+import { getEmptyAlarmData, unBoxingAlarmData } from '../../utils/alarm';
+import { useAlarmList } from '../../store/alarm';
 
 import '../../styles/alarm/alarmLayout.scss';
 
@@ -18,50 +18,33 @@ const form = unBoxingAlarmData(getEmptyAlarmData());
  */
 const AlarmLayout = () => {
     const [isAddAlarm, setIsAddAlarm] = useState(false);
-    const [alarms, setAlarmList] = useAlarmList(null);
     const [alarmSelected, setAlarmSelected] = useState(null);
-
-    const saveAlarm = async(data)=> {
-        try{
-            const dt = boxingAlarmData(data)
-            if (dt.alarmId !== null) {
-                await updateAlarm(dt);
-            }else{
-                await createAlarm(dt);
-            }
-            setAlarmList(dt.alarmId);
-        }catch(err){
-            alert(err);
-        }
-    }
-
-    const _deleteAlarm = async (alarmId) => {
-        try {
-            await deleteAlarm(alarmId);
-            setAlarmList(alarmId);
-        } catch (e) {
-            alert(e);
-        }
-    }
+    const loaderData = useLoaderData();
+    const { alarmList, setAlarmList} = useAlarmList();
 
     useEffect(()=>{
-        if(alarms.length === 0){
+        if(alarmList.length === 0){
             setIsAddAlarm(true);
         }else{
             setIsAddAlarm(false);
-            setAlarmSelected(alarms[0].alarmId);
+            setAlarmSelected(alarmList[0].alarmId);
         }
-    },[alarms, setAlarmSelected, setIsAddAlarm]);
+    },[alarmList]);
 
-    const data = isAddAlarm ? form : alarmSelected ? alarms.filter((v)=>v.alarmId === alarmSelected)[0]: form;
+    useEffect(()=>{
+        setAlarmList(loaderData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[loaderData]);
+
+    const data = isAddAlarm ? form : alarmSelected ? alarmList.filter((v)=>v.alarmId === alarmSelected)[0]: form;
 
     return (
         <div className="wrap">
             <div className='container'>
                 <HeaderForm isAddAlarm={isAddAlarm} setIsAddAlarm={setIsAddAlarm}/>
                 <div className='body'>
-                    <AddAlarmForm alarmData={data} save={saveAlarm} remove={_deleteAlarm}/>
-                    <AlarmListForm alarms={alarms} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
+                    <AddAlarmForm alarmData={data}/>
+                    <AlarmListForm alarms={alarmList} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
                 </div>
             </div>
         </div>
