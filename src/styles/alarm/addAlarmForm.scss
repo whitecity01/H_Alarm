@@ -1,6 +1,6 @@
 @media (min-width: 1200px){
 
-    .form{
+    .addAlarm-form{
         border-radius: 15px;
         width:360px;
         height: 360px;
@@ -14,11 +14,18 @@
                 height: 25px;
             }
         }
+        & > :nth-child(n+2){
+            & > :nth-child(2){
+                button{
+                    margin-left:5px;
+                }
+            }
+        }
     }
 
 }
 
-.form{
+.addAlarm-form{
     background: #171717;
     display:flex;
     flex-direction: column;
@@ -56,10 +63,10 @@
             color:white;
             
         }
-        .disabled{
+        .addAlarm-disabled{
             color: #3b3b3b;
         }
-        .time{
+        .addAlarm-time{
             font-size:30px;
         }
     }

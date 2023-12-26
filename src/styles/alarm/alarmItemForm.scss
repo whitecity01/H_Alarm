@@ -1,5 +1,5 @@
 @media (min-width: 1200px){
-    .alarm-item{
+    .alarmItem-item{
         width:380px;
         padding:5px;
         margin-bottom: 5px;
@@ -26,7 +26,7 @@
             }
         }
         & > div:first-child{
-            .circle{
+            .alarmItem-circle{
                 width: 10px;
                 height: 10px;
             }
@@ -34,7 +34,7 @@
     }
 }
 
-.alarm-item{
+.alarmItem-item{
     cursor: pointer;
     background-color: #171717;
     display:flex;
@@ -65,7 +65,7 @@
         & > :nth-child(3){
             display:flex;
             align-items: center;
-            .active {
+            .alarmItem-active {
                 color:#ff893b;
             }
         }
@@ -73,7 +73,7 @@
     & > div:first-child{
         width:100%;
         align-items: end;
-        .circle{
+        .alarmItem-circle{
             margin-left:auto;
             border-radius: 50%;
             background: #65EC12;

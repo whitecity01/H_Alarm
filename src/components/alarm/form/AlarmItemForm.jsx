@@ -1,9 +1,8 @@
-import classNames from 'classnames/bind';
 import { useCallback } from 'react';
 
-import alarmItemFormStyle from '../../../styles/alarm/alarmItemForm.module.scss';
 import { dateToString } from '../../../utils/alarm';
-const style = classNames.bind(alarmItemFormStyle);
+
+import '../../../styles/alarm/alarmItemForm.scss';
 
 /**
  * AlarmItem 컴포넌트. 페이지 우측 위치. AlarmData를 보여주는 기능을 함
@@ -24,9 +23,9 @@ const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
     },[data.alarmId, setAlarmSelected]);
 
     return(
-        <div className={style('alarm-item')} onClick={_setAlarmSelected}>
+        <div className='alarmItem-item' onClick={_setAlarmSelected}>
             <div>
-                <div className={style('circle')}></div>
+                <div className='alarmItem-circle'></div>
             </div>
             <div>
                 <div>
@@ -46,9 +45,9 @@ const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
                     </p>
                 </div>
                 <div>
-                    <p className={style({active: data.method === "E"})}>E</p>
-                    <p className={style({active: data.method === "C"})}>C</p>
-                    <p className={style({active: data.method === "M"})}>M</p>
+                    <p className={ data.method === "E" ? "alarmItem-active" : ""}>E</p>
+                    <p className={ data.method === "C" ? "alarmItem-active" : ""}>C</p>
+                    <p className={ data.method === "M" ? "alarmItem-active" : ""}>M</p>
                 </div>
             </div>
         </div>

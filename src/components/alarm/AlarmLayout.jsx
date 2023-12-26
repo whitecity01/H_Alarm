@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
 
 import AlarmListForm from './form/AlarmListForm';
 import AddAlarmForm from './form/AddAlarmForm';
@@ -8,9 +7,7 @@ import useAlarmList from '../../hooks/useAlarmList';
 import { deleteAlarm, updateAlarm, createAlarm } from '../../services/alarm/alarm';
 import { boxingAlarmData, getEmptyAlarmData, unBoxingAlarmData } from '../../utils/alarm';
 
-import alarmLayoutStyle from '../../styles/alarm/alarmLayout.module.scss';
-
-const style = classNames.bind(alarmLayoutStyle);
+import '../../styles/alarm/alarmLayout.scss';
 
 const form = unBoxingAlarmData(getEmptyAlarmData());
 
@@ -59,10 +56,10 @@ const AlarmLayout = () => {
     const data = isAddAlarm ? form : alarmSelected ? alarms.filter((v)=>v.alarmId === alarmSelected)[0]: form;
 
     return (
-        <div className={style('wrap')}>
-            <div className={style('container')}>
+        <div className="wrap">
+            <div className='container'>
                 <HeaderForm isAddAlarm={isAddAlarm} setIsAddAlarm={setIsAddAlarm}/>
-                <div className={style('body')}>
+                <div className='body'>
                     <AddAlarmForm alarmData={data} save={saveAlarm} remove={_deleteAlarm}/>
                     <AlarmListForm alarms={alarms} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
                 </div>

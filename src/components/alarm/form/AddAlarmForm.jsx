@@ -1,9 +1,7 @@
-import classNames from 'classnames/bind';
 
 import useAlarmData from '../../../hooks/useAlarmData';
 
-import addAlarmStyle from '../../../styles/alarm/addAlarmForm.module.scss';
-const style = classNames.bind(addAlarmStyle);
+import '../../../styles/alarm/addAlarmForm.scss';
 
 /**
  * AddAlarm 컴포넌트. 페이지 좌측에 위치. AlarmData의 수정 및 저장, 삭제 기능을 함
@@ -96,16 +94,16 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
     /> : <></>
 
     return(
-        <div className={style('form')}>
+        <div className='addAlarm-form'>
             <div>
                 <TrashCan/>
             </div>
             <div>
                 <div>
-                    <button onClick={inputTime} name="am" className={style({disabled: !data.time.isAm})}>오전</button>
-                    <button onClick={inputTime} name="pm" className={style({disabled: data.time.isAm})}>오후</button>
+                    <button onClick={inputTime} name="am" className={!data.time.isAm ? "addAlarm-disabled" : ""}>오전</button>
+                    <button onClick={inputTime} name="pm" className={data.time.isAm ? "addAlarm-disabled" : ""}>오후</button>
                 </div>
-                <div className={style('time')}>
+                <div className='addAlarm-time'>
                     <span><input type="text" value={data.time.hour} onChange={inputTime} name="hour" /></span>
                     <span>:</span>
                     <span><input type="text" value={data.time.minute} onChange={inputTime} name="minute" /></span>
@@ -116,13 +114,13 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>반복</span>
                 </div>
                 <div>
-                    <button onClick={inputDay} name="0" className={style({disabled:!data.day.includes(0)})}>일</button>
-                    <button onClick={inputDay} name="1" className={style({disabled:!data.day.includes(1)})}>월</button>
-                    <button onClick={inputDay} name="2" className={style({disabled:!data.day.includes(2)})}>화</button>
-                    <button onClick={inputDay} name="3" className={style({disabled:!data.day.includes(3)})}>수</button>
-                    <button onClick={inputDay} name="4" className={style({disabled:!data.day.includes(4)})}>목</button>
-                    <button onClick={inputDay} name="5" className={style({disabled:!data.day.includes(5)})}>금</button>
-                    <button onClick={inputDay} name="6" className={style({disabled:!data.day.includes(6)})}>토</button>
+                    <button onClick={inputDay} name="0" className={!data.day.includes(0) ? "addAlarm-disabled" : ""}>일</button>
+                    <button onClick={inputDay} name="1" className={!data.day.includes(1) ? "addAlarm-disabled" : ""}>월</button>
+                    <button onClick={inputDay} name="2" className={!data.day.includes(2) ? "addAlarm-disabled" : ""}>화</button>
+                    <button onClick={inputDay} name="3" className={!data.day.includes(3) ? "addAlarm-disabled" : ""}>수</button>
+                    <button onClick={inputDay} name="4" className={!data.day.includes(4) ? "addAlarm-disabled" : ""}>목</button>
+                    <button onClick={inputDay} name="5" className={!data.day.includes(5) ? "addAlarm-disabled" : ""}>금</button>
+                    <button onClick={inputDay} name="6" className={!data.day.includes(6) ? "addAlarm-disabled" : ""}>토</button>
                 </div>
             </div>
             <div>
@@ -130,11 +128,11 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>수단</span>
                 </div>
                 <div>
-                    <button onClick={selectMethod} name="E" className={style({disabled:!(data.method==="E")})}>이메일</button>
+                    <button onClick={selectMethod} name="E" className={!(data.method==="E") ? "addAlarm-disabled" : ""}>이메일</button>
                     <span>|</span>
-                    <button onClick={selectMethod} name="C" className={style({disabled:!(data.method==="C")})}>전화</button>
+                    <button onClick={selectMethod} name="C" className={!(data.method==="C") ? "addAlarm-disabled" : ""}>전화</button>
                     <span>|</span>
-                    <button onClick={selectMethod} name="M" className={style({disabled:!(data.method==="M")})}>문자</button>
+                    <button onClick={selectMethod} name="M" className={!(data.method==="M") ? "addAlarm-disabled" : ""}>문자</button>
                 </div>
             </div>
             <div>
@@ -142,11 +140,11 @@ const AddAlarmForm = ({alarmData, save, remove}) => {
                     <span>날짜</span>
                 </div>
                 <div>
-                    <input type="text" name="year" value={data.date.year} onChange={inputDate} className={style({disabled: !(data.day.length === 0)})}/>
+                    <input type="text" name="year" value={data.date.year} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
                     <span>/</span>
-                    <input type="text" name="month" value={data.date.month} onChange={inputDate} className={style({disabled: !(data.day.length === 0)})}/>
+                    <input type="text" name="month" value={data.date.month} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
                     <span>/</span>
-                    <input type="text" name="day" value={data.date.day} onChange={inputDate} className={style({disabled: !(data.day.length === 0)})}/>
+                    <input type="text" name="day" value={data.date.day} onChange={inputDate} className={!(data.day.length === 0) ? "addAlarm-disabled" : ""}/>
                 </div>
             </div>
             <div>

@@ -4,9 +4,6 @@
         margin-top: 10px;
         .container{
             width: 800px;
-            .body{
-                display:flex;
-            }
         }
     }
 }
@@ -23,6 +20,7 @@
         color:#fff;
         .body{
             width: 100%;
+            display:flex;
         }
     }
 }
