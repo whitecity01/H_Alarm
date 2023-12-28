@@ -3,8 +3,7 @@ import { redirect } from "react-router-dom";
 import { boxingAlarmData, unBoxingAlarmData } from "../../utils/alarm";
 import { deleteAlarm, updateAlarm, createAlarm, readAlarm } from '../../services/alarm/alarm';
 import { useAlarmList } from "../../store/alarm";
-import { ALL_LOADED_ALARM, CREATE_NEW_ALARM } from '../../constants/alarm';
-import { SERVER_IP } from "../../constants/api";
+import { ALL_LOAD, CREATE_ALARM, LOAD_MULTIPLE, LOAD_SINGLE, REMOVE_ALARM, UPDATE_ALARM, EMPTY_ALARM_LIST, LOAD_VALUE } from '../../constants/alarm';
 
 import AlarmLayout from "../../components/alarm/AlarmLayout";
 
@@ -17,18 +16,62 @@ export default AlarmPage;
 
 export const loader = async({request}) => {
     const url = new URL(request.url);
-    const alarmId = url.searchParams.has('alarmId') ? url.searchParams.get('alarmId') : ALL_LOADED_ALARM;
+    const curList = useAlarmList.getState().alarmList;
+    const _alarmId = url.searchParams.has('alarmId') ? Number(url.searchParams.get('alarmId')) : null;
+    const type = (()=>{
+        if (_alarmId === null) return LOAD_MULTIPLE;
+        if (curList.length === 0) return ALL_LOAD;
+        const type = url.searchParams.has('type')? Number(url.searchParams.get('alarmId')) : null;
+        switch(type){
+            case CREATE_ALARM:
+            case REMOVE_ALARM:
+            case UPDATE_ALARM:
+                return LOAD_SINGLE;
+            default:
+                return LOAD_MULTIPLE;
+        }
+    })();
+
+    const alarmId = type === LOAD_MULTIPLE ? 
+        curList.length === 0 ? EMPTY_ALARM_LIST : curList[curList.length - 1].alarmId 
+        :
+        _alarmId;
+
     try{
-        if (alarmId === ALL_LOADED_ALARM) return (await readAlarm(alarmId)).map(dt=>unBoxingAlarmData(dt));
-        else return [...useAlarmList.getState().alarmList , ...(await readAlarm(alarmId)).map(dt=>unBoxingAlarmData(dt))];
+        const data = (await readAlarm(alarmId, type)).map(dt=>unBoxingAlarmData(dt));
+        const alarmList = (()=>{
+            if(data.length === 0) curList.filter((data)=>data.alarmId === alarmId);
+            switch(type){
+                case LOAD_SINGLE:
+                    const index = curList.findIndex( data => data.alarmId === alarmId);
+                    return (curList[index] = data[0]);
+                case LOAD_MULTIPLE:
+                    return alarmId ? [...curList,...data] : data;
+                case ALL_LOAD:
+                    return data;
+                default:
+                    return curList;
+            }
+        })();
+
+        return {
+            alarmList, 
+            curAlarmId: alarmId,
+            isLoadable : type === LOAD_MULTIPLE && data.length < LOAD_VALUE ? false : true,
+        };
     }catch(err){
         alert(err);
+        return {
+            alarmList : curList,
+            curAlarmId : null,
+            isLoadable : true,
+        };
     }
-    return useAlarmList.getState().alarmList;
 }
 
 export const action = async({ request }) => {
-    const url = new URL("/alarm",SERVER_IP );
+    const url = new URL(request.url);
+    url.search = '';
     const data = await request.formData();
     const type = data.get("type");
     const form = boxingAlarmData({
@@ -43,13 +86,16 @@ export const action = async({ request }) => {
     });
     
     try{
-        if(form.alarmId === CREATE_NEW_ALARM) {
+        if(form.alarmId === CREATE_ALARM) {
             url.searchParams.append("alarmId", await createAlarm(form));
+            url.searchParams.append("type", CREATE_ALARM);
         }else{
             if(type === 'remove'){
                 await deleteAlarm(form.alarmId);
+                url.searchParams.append('type', REMOVE_ALARM);
             }else{
                 await updateAlarm(form);
+                url.searchParams.append('type', UPDATE_ALARM);
             }
             url.searchParams.append('alarmId', form.alarmId);
         }

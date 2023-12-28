@@ -1,4 +1,4 @@
-import { CREATE_NEW_ALARM } from "../constants/alarm";
+import { CREATE_ALARM } from "../constants/alarm";
 
 /**
  * 유닉스 시간을 받아 날짜를 포함하는 객체로 만들어서 반환
@@ -103,7 +103,7 @@ export const unBoxingAlarmData = (data) =>{
  */
 export const getEmptyAlarmData = () => {
     return {
-        alarmId: CREATE_NEW_ALARM,
+        alarmId: CREATE_ALARM,
         date: 0,
         day: [],
         time: 0,

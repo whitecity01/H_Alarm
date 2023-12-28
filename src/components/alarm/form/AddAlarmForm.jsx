@@ -3,7 +3,7 @@ import { Form } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import '../../../styles/alarm/addAlarmForm.scss';
-import { CREATE_NEW_ALARM } from "../../../constants/alarm";
+import { CREATE_ALARM } from "../../../constants/alarm";
 
 /**
  * AddAlarm 컴포넌트. 페이지 좌측에 위치. AlarmData의 수정 및 저장, 삭제 기능을 함
@@ -105,7 +105,7 @@ const AddAlarmForm = ({ alarmData }) => {
         //setMessage(alarmData.message);
     },[alarmData]);
 
-    const TrashCan = ()=>alarmId !== CREATE_NEW_ALARM ? 
+    const TrashCan = ()=>alarmId !== CREATE_ALARM ? 
     <button type="submit" name="type" value="remove">
         <img
             src="trash-can-1.png"

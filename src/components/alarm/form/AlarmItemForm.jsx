@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, forwardRef } from 'react';
 
 import { dateToString } from '../../../utils/alarm';
 
@@ -14,7 +14,7 @@ import '../../../styles/alarm/alarmItemForm.scss';
  * @param {Function} param.setAlarmSelected - AlarmItem이 클릭될 때 수행할 이벤트 함수
  * @returns {JSX.Element} AlarmItem 컴포넌트를 렌더링
  */
-const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
+const AlarmItemForm = forwardRef(({isEdit, data, remove, setAlarmSelected}, ref) => {
 
     const Date = ({date}) => <>{dateToString(date)}</>
 
@@ -23,7 +23,7 @@ const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
     },[data.alarmId, setAlarmSelected]);
 
     return(
-        <div className='alarmItem-item' onClick={_setAlarmSelected}>
+        <div ref={ref} className='alarmItem-item' onClick={_setAlarmSelected}>
             <div>
                 <div className='alarmItem-circle'></div>
             </div>
@@ -52,6 +52,6 @@ const AlarmItemForm = ({isEdit, data, remove, setAlarmSelected}) => {
             </div>
         </div>
     )
-}
+});
 
 export default AlarmItemForm;

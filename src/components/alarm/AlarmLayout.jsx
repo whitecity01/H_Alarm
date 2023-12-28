@@ -21,7 +21,6 @@ const AlarmLayout = () => {
     const [alarmSelected, setAlarmSelected] = useState(null);
     const loaderData = useLoaderData();
     const { alarmList, setAlarmList} = useAlarmList();
-
     useEffect(()=>{
         if(alarmList.length === 0){
             setIsAddAlarm(true);
@@ -32,19 +31,17 @@ const AlarmLayout = () => {
     },[alarmList]);
 
     useEffect(()=>{
-        setAlarmList(loaderData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[loaderData]);
+        setAlarmList(loaderData.alarmList);
+    },[loaderData.alarmList, setAlarmList]);
 
     const data = isAddAlarm ? form : alarmSelected ? alarmList.filter((v)=>v.alarmId === alarmSelected)[0]: form;
-
     return (
         <div className="wrap">
             <div className='container'>
                 <HeaderForm isAddAlarm={isAddAlarm} setIsAddAlarm={setIsAddAlarm}/>
                 <div className='body'>
                     <AddAlarmForm alarmData={data}/>
-                    <AlarmListForm alarms={alarmList} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
+                    <AlarmListForm alarms={alarmList} isLoadable={loaderData.isLoadable} alarmSelected={alarmSelected} setAlarmSelected={setAlarmSelected}/>
                 </div>
             </div>
         </div>
