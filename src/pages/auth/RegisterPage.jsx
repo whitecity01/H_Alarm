@@ -1,7 +1,7 @@
 import { redirect } from "react-router-dom";
-import RegisterForm from "../../components/auth/register/RegisterForm";
-import RegisterLayout from "../../components/auth/register/RegisterLayout";
-import { requestRegister } from "../../services/auth/auth";
+import RegisterForm from "components/auth/register/RegisterForm";
+import RegisterLayout from "components/auth/register/RegisterLayout";
+import { requestRegister } from "services/auth/auth";
 
 const RegisterPage = () => {
   return (

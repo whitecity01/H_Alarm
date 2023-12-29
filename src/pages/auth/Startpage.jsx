@@ -1,4 +1,4 @@
-import StartForm from "../../components/auth/start/StartForm";
+import StartForm from "components/auth/start/StartForm";
 
 const StartPage = () => {
   return (

@@ -1,8 +1,8 @@
-import LoginPage, { action as loginAction } from "../pages/auth/LoginPage";
+import LoginPage, { action as loginAction } from "pages/auth/LoginPage";
 import RegisterPage, {
   action as registerAction,
-} from "../pages/auth/RegisterPage";
-import StartPage from "../pages/auth/Startpage";
+} from "pages/auth/RegisterPage";
+import StartPage from "pages/auth/Startpage";
 
 const auth = [
   {

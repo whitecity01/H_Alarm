@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form } from "react-router-dom";
-import "../../../styles/auth/RegisterForm.scss";
-import { emailVerify, phoneNumberVerify } from "../../../services/auth/auth";
+import "styles/auth/RegisterForm.scss";
+import { emailVerify, phoneNumberVerify } from "services/auth/auth";
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [emailVerifyCode, setEmailVerifyCode] = useState("");

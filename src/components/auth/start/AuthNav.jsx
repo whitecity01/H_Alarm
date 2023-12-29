@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import '../../../styles/auth/AuthNav.scss'
+import "styles/auth/AuthNav.scss";
 const AuthNav = () => {
   return (
     <div className="auth-nav-container">
