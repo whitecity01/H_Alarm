@@ -1,0 +1,26 @@
+@media (min-width: 1200px){
+
+    .wrap{
+        margin-top: 10px;
+        .container{
+            width: 800px;
+        }
+    }
+}
+
+
+
+.wrap{
+    width:100%;
+    .container{
+        margin:auto;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+        color:#fff;
+        .body{
+            width: 100%;
+            display:flex;
+        }
+    }
+}
