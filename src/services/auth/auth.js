@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SERVER_IP } from "../../constants/api";
+import { SERVER_IP } from "constants/api";
 
 /**
  * auth API 요청 Interface

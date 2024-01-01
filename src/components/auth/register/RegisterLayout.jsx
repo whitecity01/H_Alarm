@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../../../styles/auth/RegisterLayout.scss";
+import "styles/auth/RegisterLayout.scss";
 const RegisterLayout = () => {
   return (
     <div className="register-layout-container">

@@ -1,5 +1,8 @@
-import AlarmPage, {action as alarmPageAction, loader as alarmPageLoader} from "../pages/alram/AlarmPage";
-import MyPage from "../pages/mypage/MyPage";
+import AlarmPage, {
+  action as alarmPageAction,
+  loader as alarmPageLoader,
+} from "pages/alram/AlarmPage";
+import MyPage from "pages/mypage/MyPage";
 
 const alarm = [
   {

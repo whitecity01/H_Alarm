@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 import LoginForm from "../../components/auth/login/LoginForm";
 import LoginLayout from "../../components/auth/login/LoginLayout";
 import { requestLogin } from "../../services/auth/auth";
-import { getAuthToken, setRefreshToken } from "../../utils/token";
+import { getAuthToken, setRefreshToken } from "utils/token";
 
 const LoginPage = () => {
   return (
