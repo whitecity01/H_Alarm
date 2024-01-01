@@ -2,7 +2,7 @@ import AlarmPage, {
   action as alarmPageAction,
   loader as alarmPageLoader,
 } from "pages/alram/AlarmPage";
-import MyPage from "pages/mypage/MyPage";
+import MyPage, { action as mypageAction } from "pages/mypage/MyPage";
 
 const alarm = [
   {
@@ -14,6 +14,7 @@ const alarm = [
   {
     path: "mypage",
     element: <MyPage />,
+    action: mypageAction,
   },
 ];
 
