@@ -1,7 +1,5 @@
-
 import { useNavigate } from 'react-router-dom';
-
-import  '../../../styles/alarm/headerInterface.scss';
+import  'styles/alarm/headerInterface.scss';
 
 /**
  * Header 컴포넌트. 페이지 상단에 위치, 왼쪽 및 오른쪽의 문자열과, 클릭 이벤트 표시
