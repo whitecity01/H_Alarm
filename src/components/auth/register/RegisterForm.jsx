@@ -128,7 +128,7 @@ const RegisterForm = () => {
         <div className="phone-number-container">
           <input
             type="hidden"
-            name = "phone=number-token"
+            name = "phone-number-token"
             value={phoneNumberToken}
           />
           <input
