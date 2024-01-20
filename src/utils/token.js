@@ -31,11 +31,20 @@ const setRefreshToken = (refreshToken, expiredTime) => {
   // });
 };
 
+const setRefreshTokenAtGlobal = (refreshToken, expiredTime) => {
+  userToken.getState().setRefreshToken(refreshToken);
+  userToken.getState().setRefreshTokenExpiration(expiredTime);
+}
+
 const setAccessToken = (accessToken, expiredTime) => {
   userToken((state)=>state.setAccessToken)(accessToken)
   userToken((state)=>state.setAccessTokenExpiration)(expiredTime);
 };
 
+const setAccessTokenAtGlobal = (accessToken, expiredTime) => {
+  userToken.getState().setAccessToken(accessToken);
+  userToken.getState().setAccessTokenExpiration(expiredTime);
+}
 /**
  * refreshToken 반환
  * @returns {string} refreshToken
@@ -61,6 +70,8 @@ const restrictAccessWithNoToken = async () => {
 export {
   getAuthToken,
   setRefreshToken,
+  setRefreshTokenAtGlobal,
   setAccessToken,
+  setAccessTokenAtGlobal,
   restrictAccessWithNoToken,
 };
