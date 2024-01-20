@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { json } from "react-router-dom";
 import { userToken } from "store/auth";
 
@@ -7,8 +7,16 @@ import { userToken } from "store/auth";
  * @returns {object} accessToken 및 setAccessToken
  */
 const getAuthToken = () => {
-  const { accessToken, setAccessToken } = userToken.getState();
-  return { accessToken, setAccessToken };
+  return userToken((state)=> state.accessTokenExpiration) < Date.now() 
+  ? 
+    userToken((state)=> state.refreshtokenExpiration) < Date.now() 
+    ?
+      null 
+      : 
+      userToken((state)=> state.refreshToken ) 
+    : 
+    userToken((state)=>state.accessToken);
+
 };
 
 /**
@@ -16,18 +24,25 @@ const getAuthToken = () => {
  * @param {string} refreshtoken
  */
 const setRefreshToken = (refreshToken, expiredTime) => {
-  Cookies.set("refreshToken", refreshToken, {
-    expires: new Date(expiredTime),
-  });
+  userToken((state)=>state.setRefreshTokend)(refreshToken)
+  userToken((state)=>state.setRefreshTokenExpiration)(expiredTime);
+  // Cookies.set("refreshToken", refreshToken, {
+  //   expires: new Date(expiredTime),
+  // });
+};
+
+const setAccessToken = (accessToken, expiredTime) => {
+  userToken((state)=>state.setAccessToken)(accessToken)
+  userToken((state)=>state.setAccessTokenExpiration)(expiredTime);
 };
 
 /**
  * refreshToken 반환
  * @returns {string} refreshToken
  */
-const getRefreshToken = () => {
-  return Cookies.get("refreshToken");
-};
+// const getRefreshToken = () => {
+//   return Cookies.get("refreshToken");
+// };
 
 /**
  * 토큰이 없는 경우 로그인 페이지로 이동시키기 위한 Loader
@@ -45,7 +60,7 @@ const restrictAccessWithNoToken = async () => {
 
 export {
   getAuthToken,
-  getRefreshToken,
   setRefreshToken,
+  setAccessToken,
   restrictAccessWithNoToken,
 };
