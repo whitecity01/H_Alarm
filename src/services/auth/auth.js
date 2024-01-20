@@ -15,24 +15,25 @@ const authAPIInterface = async (url, data = null, params=null) => {
     });
     return res.data;
   }catch(e){
+    console.log(e);
     switch (e.response.status) {
       case 400:
-        throw new Error("잘못된 입력");
+        throw new Error(e.response.data);
       case 401:
-        throw new Error("인증 실패");
+        throw new Error(e.response.data);
       default:
         throw new Error(`서버 에러: ${e.response.status}`);
     }
   }
 };
 
-const requestLogin = async (data) => {
-  const res = await authAPIInterface("/login", data);
+const requestLogin = async (email, password) => {
+  const res = await authAPIInterface("/auth/signin", {email, password});
   return res;
 };
 
-const requestRegister = async (data) => {
-  const res = await authAPIInterface("/register", data);
+const requestRegister = async (email, password, phoneNumber, emailToken, phoneNumberToken) => {
+  const res = await authAPIInterface("/auth/signup", {email, password, phoneNumber, emailToken, phoneNumberToken});
   return res;
 };
 
