@@ -8,16 +8,21 @@ import { SERVER_IP } from "constants/api";
  * @param {String} params 쿼리 데이터
  * @returns 응답 객체
  */
-const authAPIInterface = async (url, data = null, params = null) => {
-  try {
+const authAPIInterface = async (url, data = null, params=null) => {
+  try{
     const res = await axios.post(`${SERVER_IP}${url}`, data, {
       headers: { "Content-Type": "application/json" },
     });
-
-    console.log(res);
     return res.data;
-  } catch (e) {
-    console.error("emergency : ", e);
+  }catch(e){
+    switch (e.response.status) {
+      case 400:
+        throw new Error("잘못된 입력");
+      case 401:
+        throw new Error("인증 실패");
+      default:
+        throw new Error(`서버 에러: ${e.response.status}`);
+    }
   }
 };
 
@@ -31,14 +36,23 @@ const requestRegister = async (data) => {
   return res;
 };
 
-const emailVerify = async (data) => {
-  const res = await authAPIInterface("/email-verify", data);
+const emailVerify = async (email) => {
+  const res = await authAPIInterface("/verify/email", {email});
   return res;
 };
 
-const phoneNumberVerify = async (data) => {
-  const res = await authAPIInterface("/phone-number-verify", data);
+const emailCodeVerify = async (token, number) => {
+  return await authAPIInterface("/verify/email/number", {token, number});
+}
+
+const phoneNumberVerify = async (phoneNumber) => {
+  const res = await authAPIInterface("/verify/sms", {phoneNumber});
   return res;
 };
 
-export { requestLogin, requestRegister, emailVerify, phoneNumberVerify };
+const phoneNumberCodeVerify = async (token, number) => {
+  const res = await authAPIInterface("/verify/sms/number", {token, number});
+  return res;
+};
+
+export { requestLogin, requestRegister, emailVerify, emailCodeVerify, phoneNumberVerify, phoneNumberCodeVerify};
