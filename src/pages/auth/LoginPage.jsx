@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 import LoginForm from "../../components/auth/login/LoginForm";
 import LoginLayout from "../../components/auth/login/LoginLayout";
 import { requestLogin } from "../../services/auth/auth";
-import { getAuthToken, setRefreshToken } from "utils/token";
+import { setAccessTokenAtGlobal, setRefreshTokenAtGlobal } from "utils/token";
 
 const LoginPage = () => {
   return (
@@ -16,25 +16,23 @@ const LoginPage = () => {
 export default LoginPage;
 
 export const action = async ({ request }) => {
-  const data = await request.formData();
+  const form = await request.formData();
 
-  const authForm = {
-    id: data.get("id-form"),
-    password: data.get("pw-form"),
-  };
+  try{
+    const {
+      accessToken, 
+      refreshToken, 
+      expirationTimeByMinuteFromAccessToken, 
+      expirationTimeByMinuteFromRefreshToken
+    } = await requestLogin(form.get("id-form"), form.get("pw-form"));
 
-  const res = await requestLogin(authForm);
+    setRefreshTokenAtGlobal(refreshToken, new Date(expirationTimeByMinuteFromRefreshToken));
+    setAccessTokenAtGlobal(accessToken, new Date(expirationTimeByMinuteFromAccessToken));
 
-  if (res === 200) {
-    const { setAccessToken } = getAuthToken();
-    const { accessTokenDto, refreshTokenDto } = res.data;
-
-    const { accessToken } = accessTokenDto;
-    const { refreshToken, refreshTokenExpiredTime: expiredTime } =
-      refreshTokenDto;
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken, expiredTime);
-
-    return redirect("/home");
+    return redirect("/alarm");
+  }catch(e){
+    console.log(e);
+    alert("회원정보가 틀립니다.");
+    return redirect("/login");
   }
 };
