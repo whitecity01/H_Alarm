@@ -3,6 +3,7 @@ import {
   LOAD_SINGLE,
   LOAD_VALUE,
 } from "constants/alarm";
+import { ALARM_CREATE, ALARM_DELETE, ALARM_PUT, ALARM_READ } from "constants/api";
 import { axiosInterface } from "services/axiosForm";
 
 export const createAlarm = async ({
@@ -14,7 +15,7 @@ export const createAlarm = async ({
   isActive,
   day
 }) => {
-  return await axiosInterface("/alarm/create", {
+  return await axiosInterface(ALARM_CREATE, {
     datetime,
     isRepeat,
     name,
@@ -29,7 +30,7 @@ export const readAlarm = async (aId, type) => {
   const value = type === LOAD_SINGLE ? 1 : LOAD_VALUE;
   const id = aId === EMPTY_ALARM_LIST ? null : aId;
 
-  return await axiosInterface("/alarm/read", {}, "get", {
+  return await axiosInterface(ALARM_READ, {}, "get", {
     id,
     value,
   });
@@ -45,7 +46,7 @@ export const updateAlarm = async ({
   isActive,
   day
 }) => {
-  return await axiosInterface("/alarm/put", {
+  return await axiosInterface(ALARM_PUT, {
     id,
     datetime,
     isRepeat,
@@ -58,7 +59,7 @@ export const updateAlarm = async ({
 };
 
 export const deleteAlarm = async (id) => {
-  return await axiosInterface("/alarm/delete", {
+  return await axiosInterface(ALARM_DELETE, {
     id,
   }, "delete");
 };
