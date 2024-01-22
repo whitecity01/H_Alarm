@@ -57,19 +57,15 @@ export const loader = async ({ request }) => {
     const data = (await readAlarm(requestId, requestType)).map((dt) =>
       unBoxingAlarmData(dt)
     );
-    console.log(data);
+    console.log(curList);
+    console.log(data)
     useAlarmList.getState().setAlarmList((() => {
       switch (requestType) {
         case LOAD_SINGLE:
-          if (data.length === 0) return curList.filter((data) => data.id === requestId)
-          const index = curList.findIndex((data) => data.id === requestId);
+          if (data.length === 0) return curList.filter((a) => a.id !== requestId)
           const temp = data[0];
-          if (index === -1){
-            const newList = curList.filter((a) => a.order < temp.order || (a.order === temp.order && a.id < temp.id));
-            return [...newList, temp]
-          };
-          curList[index] = temp;
-          return curList;
+          const newList = curList.filter((a) => a.id !== temp.id && (a.order < temp.order || (a.order === temp.order && a.id < temp.id)));
+          return [...newList, temp]
         case LOAD_MULTIPLE:
           return [...curList, ...data.slice(1)];
         case ALL_LOAD:
@@ -78,10 +74,9 @@ export const loader = async ({ request }) => {
           return curList;
       }
     })());
-    console.log(useAlarmList.getState().alarmList);
 
     return {
-      curAlarmId: requestId,
+      curAlarmId: type === REMOVE_ALARM ? null : requestId,
       isLoadable:
         requestType !== LOAD_SINGLE && data.length < LOAD_VALUE ? false : true,
     };
@@ -96,29 +91,32 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
   const url = new URL(request.url);
+  url.search="";
   const data = await request.formData();
   const type = Number(data.get("type"));
   const days = data.get("days");
   const day = days.trim().length !== 0 ? days.split(",") : [];
+  //console.log("year: "+ data.get("year") + " month:"+ data.get("month") +" day: "+ data.get("day")+" hour:"+ data.get("hour")+" min:"+ data.get("minute")+" am:"+data.get("isAm"));
   const form = boxingAlarmData({
-    id: data.get("id"),
+    id: Number(data.get("id")),
     date: {
-      year: data.get("year"),
-      month: data.get("month"),
-      day: data.get("day"),
+      year: Number(data.get("year")),
+      month: Number(data.get("month")),
+      day: Number(data.get("day")),
     },
     time: {
-      hour: data.get("hour"),
-      minute: data.get("minute"),
-      isAm: data.get("am"),
+      hour: Number(data.get("hour")),
+      minute: Number(data.get("minute")),
+      isAm: data.get("isAm") === "true",
     },
-    isRepeat: data.get("isRepeat"),
+    isRepeat: data.get("isRepeat") === "true",
     name: data.get("name"),
     message: data.get("message"),
     method: data.get("method"),
-    isActive: data.get("isActive"),
+    isActive: data.get("isActive") === "true",
     day,
   });
+
 
   try {
     switch(type){
