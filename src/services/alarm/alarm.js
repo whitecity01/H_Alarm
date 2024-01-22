@@ -45,7 +45,7 @@ export const updateAlarm = async ({
   isActive,
   day
 }) => {
-  return await axiosInterface("/alarm/update", {
+  return await axiosInterface("/alarm/put", {
     id,
     datetime,
     isRepeat,
@@ -54,12 +54,12 @@ export const updateAlarm = async ({
     method,
     isActive,
     day
-  },"update");
+  },"put");
 };
 
-export const deleteAlarm = async (alarmId) => {
+export const deleteAlarm = async (id) => {
   return await axiosInterface("/alarm/delete", {
-    alarmId,
+    id,
   }, "delete");
 };
 
