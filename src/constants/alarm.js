@@ -5,7 +5,7 @@ export const CREATE_ALARM = -4;
 export const REMOVE_ALARM = -5;
 export const UPDATE_ALARM = -6;
 
-export const LOAD_VALUE = 30;
+export const LOAD_VALUE = 20; //정확하게 안봤는데 값이 너무 작으면 제대로 작동 안함
 
 export const EMPTY_ALARM_LIST = 0;
 
