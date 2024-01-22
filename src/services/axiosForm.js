@@ -25,8 +25,7 @@ axiosInstance.interceptors.response.use(
     },
     (error)=>{
         if (error.response && error.response.status === 401){
-            //window.location.href = '/';
-            console.log("페이지 복귀");
+            window.location.href = '/';
             //history 훅 만들어서 하는게 더 좋음
         }
         return Promise.reject(error);
