@@ -20,7 +20,6 @@ const AlarmLayout = () => {
   const loaderData = useLoaderData();
   const alarmList = useAlarmList((state)=>state.alarmList);
 
-  console.log(alarmList);
   useEffect(() => {
     if (alarmList.length === 0) {
       setIsAddAlarm(true);
@@ -32,9 +31,13 @@ const AlarmLayout = () => {
 
   const data = isAddAlarm
     ? form
-    : alarmSelected
-    ? alarmList.filter((v) => v.id === alarmSelected)[0]
-    : form;
+    : (() => {
+      if (alarmSelected){
+        const data = alarmList.filter((v) => v.id === alarmSelected)[0]
+        if (data) return data;
+      }
+      return form
+    })();
 
 
   return (
