@@ -17,8 +17,8 @@ const AlarmListForm = ({
     alarms.length < LOAD_VALUE
       ? alarms.length === 0
         ? -1
-        : alarms[alarms.length - 1].alarmId
-      : alarms[alarms.length - LOAD_VALUE].alarmId;
+        : alarms[alarms.length - 1].id
+      : alarms[alarms.length - LOAD_VALUE].id;
 
   useEffect(() => {
     setObserver(
@@ -48,11 +48,11 @@ const AlarmListForm = ({
   const List = () =>
     alarms.map((alarm) => (
       <AlarmItemForm
-        ref={alarm.alarmId === observeTargetId ? target : null}
-        key={alarm.alarmId}
+        ref={alarm.id === observeTargetId ? target : null}
+        key={alarm.id}
         setAlarmSelected={setAlarmSelected}
         data={alarm}
-        isEdit={alarm.alarmId === alarmSelected}
+        isEdit={alarm.id === alarmSelected}
       />
     ));
 

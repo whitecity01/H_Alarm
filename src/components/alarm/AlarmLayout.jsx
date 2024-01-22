@@ -18,31 +18,31 @@ const AlarmLayout = () => {
   const [isAddAlarm, setIsAddAlarm] = useState(false);
   const [alarmSelected, setAlarmSelected] = useState(null);
   const loaderData = useLoaderData();
-  const { alarmList, setAlarmList } = useAlarmList();
+  const alarmList = useAlarmList((state)=>state.alarmList);
+
+  console.log(alarmList);
   useEffect(() => {
     if (alarmList.length === 0) {
       setIsAddAlarm(true);
     } else {
       setIsAddAlarm(false);
-      setAlarmSelected(alarmList[0].alarmId);
+      setAlarmSelected(alarmList[0].id);
     }
   }, [alarmList]);
-
-  useEffect(() => {
-    setAlarmList(loaderData.alarmList);
-  }, [loaderData.alarmList, setAlarmList]);
 
   const data = isAddAlarm
     ? form
     : alarmSelected
-    ? alarmList.filter((v) => v.alarmId === alarmSelected)[0]
+    ? alarmList.filter((v) => v.id === alarmSelected)[0]
     : form;
+
+
   return (
     <div className="wrap">
       <div className="container">
         <HeaderForm isAddAlarm={isAddAlarm} setIsAddAlarm={setIsAddAlarm} />
         <div className="body">
-          <AddAlarmForm alarmData={data} />
+          <AddAlarmForm data={data} />
           <AlarmListForm
             alarms={alarmList}
             isLoadable={loaderData.isLoadable}

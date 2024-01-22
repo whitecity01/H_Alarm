@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form } from "react-router-dom";
 import "styles/auth/RegisterForm.scss";
 import { emailVerify, emailCodeVerify, phoneNumberVerify, phoneNumberCodeVerify } from "services/auth/auth";
-import { isEmail, isPassword, isPhoneNumber } from "utils/valid";
+import { validateEmail, validatePassword, validatePhoneNumber } from "utils/validate";
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [emailVerifyCode, setEmailVerifyCode] = useState("");
@@ -16,7 +16,7 @@ const RegisterForm = () => {
   const [phoneNumberToken, setPhoneNumberToken] = useState("");
 
   const requestEmailVerify = async () => {
-    if (!isEmail(email)) {
+    if (!validateEmail(email)) {
       alert("이메일을 입력해주세요.");
       return;
     }
@@ -41,7 +41,7 @@ const RegisterForm = () => {
   }
 
   const requestPhoneNumberVerify = async () => {
-    if(!isPhoneNumber(phoneNumber)){
+    if(!validatePhoneNumber(phoneNumber)){
       alert("양식에 맞게 전화번호를 입력해주세요.");
       return;
     }
@@ -72,7 +72,7 @@ const RegisterForm = () => {
     }else if(isPhoneNumberVerify === false){
       e.preventDefault();
       alert("휴대폰번호가 인증되지 않았습니다.")
-    }else if(!isPassword(pw)){
+    }else if(!validatePassword(pw)){
       e.preventDefault();
       alert("비밀번호 양식에 맞게 입력해주세요.");
     }else if(pw !== pwCheck){

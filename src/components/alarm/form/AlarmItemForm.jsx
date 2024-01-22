@@ -1,6 +1,7 @@
 import { useCallback, forwardRef } from "react";
 import { dateToString } from "utils/alarm";
 import "styles/alarm/alarmItemForm.scss";
+import { ALARM_DTO_CALL, ALARM_DTO_EMAIL, ALARM_DTO_SMS } from "constants/alarm";
 
 /**
  * AlarmItem 컴포넌트. 페이지 우측 위치. AlarmData를 보여주는 기능을 함
@@ -17,8 +18,8 @@ const AlarmItemForm = forwardRef(
     const Date = ({ date }) => <>{dateToString(date)}</>;
 
     const _setAlarmSelected = useCallback(() => {
-      setAlarmSelected(data.alarmId);
-    }, [data.alarmId, setAlarmSelected]);
+      setAlarmSelected(data.id);
+    }, [data.id, setAlarmSelected]);
 
     return (
       <div ref={ref} className="alarmItem-item" onClick={_setAlarmSelected}>
@@ -35,13 +36,13 @@ const AlarmItemForm = forwardRef(
           <div>
             <p>{data.name}</p>
             <p>
-              <Date date={data.date} />
+              <Date date={data.day.length===0 ? data.date : data.day} />
             </p>
           </div>
           <div>
-            <p className={data.method === "E" ? "alarmItem-active" : ""}>E</p>
-            <p className={data.method === "C" ? "alarmItem-active" : ""}>C</p>
-            <p className={data.method === "M" ? "alarmItem-active" : ""}>M</p>
+            <p className={data.method === ALARM_DTO_EMAIL ? "alarmItem-active" : ""}>E</p>
+            <p className={data.method === ALARM_DTO_CALL ? "alarmItem-active" : ""}>C</p>
+            <p className={data.method === ALARM_DTO_SMS ? "alarmItem-active" : ""}>M</p>
           </div>
         </div>
       </div>
