@@ -19,6 +19,18 @@ const getAuthToken = () => {
 
 };
 
+const getAuthTokenAtGlobal = () => {
+  return userToken.getState().accessTokenExpiration < Date.now()
+  ?
+    userToken.getState().refreshTokenExpiration < Date.now()
+    ?
+      ""
+      :
+      userToken.getState().refreshToken
+    :
+    userToken.getState().accessToken;
+}
+
 /**
  * refreshToken 저장
  * @param {string} refreshtoken
@@ -74,4 +86,5 @@ export {
   setAccessToken,
   setAccessTokenAtGlobal,
   restrictAccessWithNoToken,
+  getAuthTokenAtGlobal
 };
