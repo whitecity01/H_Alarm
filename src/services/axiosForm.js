@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SERVER_IP } from "constants/api";
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRATION, SERVER_IP } from "constants/api";
 import { getAuthTokenAtGlobal, setAccessTokenAtGlobal } from "utils/token";
 
 const axiosInstance = axios.create({
@@ -18,8 +18,8 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     (response)=>{
-        if(response.headers['accessToken'] && response.headers['expirationTimeFromAccessToken']){
-            setAccessTokenAtGlobal(response.headers['accessToken'], response.headers['expirationTimeFromAccessToken']);
+        if(response.headers[ACCESS_TOKEN] && response.headers[ACCESS_TOKEN_EXPIRATION]){
+            setAccessTokenAtGlobal(response.headers[ACCESS_TOKEN], response.headers[ACCESS_TOKEN_EXPIRATION]);
         }
         return response;
     },

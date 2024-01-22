@@ -9,3 +9,7 @@ export const ALARM_CREATE = process.env.REACT_APP_ALARM_CREATE;
 export const ALARM_READ = process.env.REACT_APP_ALARM_READ;
 export const ALARM_PUT = process.env.REACT_APP_ALARM_PUT;
 export const ALARM_DELETE = process.env.REACT_APP_ALARM_DELETE;
+export const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
+export const ACCESS_TOKEN_EXPIRATION = process.env.REACT_APP_ACCESS_TOKEN_EXPIRATION;
+export const REFRESH_TOKEN = process.env.REACT_APP_REFRESH_TOKEN;
+export const REFRESH_TOKEN_EXPIRATION = process.env.REACT_APP_REFRESH_TOKEN_EXPIRATION;

@@ -39,7 +39,6 @@ export const getMillisFromDate = date =>{
 }
 
 export const getMillisFromTime = time => {
-  console.log(time);
   return new Date(
     1970,0,1,
     (time.hour + (time.isAm ? 0 : 12)) % 24,

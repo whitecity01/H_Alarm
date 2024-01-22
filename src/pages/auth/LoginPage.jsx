@@ -3,6 +3,7 @@ import LoginForm from "../../components/auth/login/LoginForm";
 import LoginLayout from "../../components/auth/login/LoginLayout";
 import { requestLogin } from "../../services/auth/auth";
 import { setAccessTokenAtGlobal, setRefreshTokenAtGlobal } from "utils/token";
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRATION } from "constants/api";
 
 const LoginPage = () => {
   return (
@@ -19,15 +20,10 @@ export const action = async ({ request }) => {
   const form = await request.formData();
 
   try{
-    const {
-      accessToken, 
-      refreshToken, 
-      expirationTimeByMinuteFromAccessToken, 
-      expirationTimeByMinuteFromRefreshToken
-    } = await requestLogin(form.get("id-form"), form.get("pw-form"));
+    const res = await requestLogin(form.get("id-form"), form.get("pw-form"));
 
-    setRefreshTokenAtGlobal(refreshToken, new Date(expirationTimeByMinuteFromRefreshToken));
-    setAccessTokenAtGlobal(accessToken, new Date(expirationTimeByMinuteFromAccessToken));
+    setRefreshTokenAtGlobal(res[REFRESH_TOKEN], new Date(res[REFRESH_TOKEN_EXPIRATION]));
+    setAccessTokenAtGlobal(res[ACCESS_TOKEN], new Date(res[ACCESS_TOKEN_EXPIRATION]));
 
     return redirect("/alarm");
   }catch(e){
