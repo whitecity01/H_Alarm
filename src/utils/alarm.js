@@ -25,13 +25,8 @@ export const getTime = (time) => {
     hour: dt.getHours(),
     minute: dt.getMinutes(),
   };
-  const isAm =
-    timeObj.hour < 12
-      ? true
-      : (() => {
-          timeObj.hour = timeObj.hour === 12 ? 12 : timeObj.hour - 12;
-          return false;
-        })();
+  const isAm = timeObj.hour < 12 ? true : false;
+  timeObj.hour %= 12;
   return {
     hour: timeObj.hour.toString().padStart(2, " "),
     minute: timeObj.minute.toString().padStart(2, "0"),
@@ -40,17 +35,16 @@ export const getTime = (time) => {
 };
 
 export const getMillisFromDate = date =>{
-  return new Date(date.year, date.month - 1, date.day).getTime();
+  return new Date(date.year, date.month - 1, date.day ).getTime() + 32400000;
 }
 
 export const getMillisFromTime = time => {
+  console.log(time);
   return new Date(
-    1970,
-    0,
-    1,
-    time.hour + 9 + (time.isAm ? 0 : 12),
-    time.minute
-  ).getTime();
+    1970,0,1,
+    (time.hour + (time.isAm ? 0 : 12)) % 24,
+    time.minute,0
+  ).getTime() + 32400000;
 }
 
 /**
@@ -107,7 +101,7 @@ export const boxingAlarmData = (data) => {
 export const unBoxingAlarmData = (data) => {
   return {
     id: data.id,
-    order: Number(data.datetime) % 86400000,
+    order: (data.datetime + 32400000) % 86400000,
     date: data.datetime ? getDate(data.datetime) : getDate(new Date().getTime()),
     time: data.datetime ? getTime(data.datetime) : getTime(new Date().getTime()),
     isRepeat: data.isRepeat,
