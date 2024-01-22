@@ -28,15 +28,15 @@ export default AlarmPage;
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
   const curList = useAlarmList.getState().alarmList;
-  const _alarmId = url.searchParams.has("alarmId")
-    ? Number(url.searchParams.get("alarmId"))
+  const id = url.searchParams.has("id")
+    ? Number(url.searchParams.get("id"))
     : null;
-  const type = (() => {
-    if (_alarmId === null) return LOAD_MULTIPLE;
+  const type = url.searchParams.has("type")
+    ? Number(url.searchParams.get("type"))
+    : null;
+  const requestType = ((id, curList, type) => {
     if (curList.length === 0) return ALL_LOAD;
-    const type = url.searchParams.has("type")
-      ? Number(url.searchParams.get("alarmId"))
-      : null;
+    if (id === null) return LOAD_MULTIPLE;
     switch (type) {
       case CREATE_ALARM:
       case REMOVE_ALARM:
@@ -45,44 +45,44 @@ export const loader = async ({ request }) => {
       default:
         return LOAD_MULTIPLE;
     }
-  })();
+  })(id, curList, type);
 
-  const alarmId =
-    type === LOAD_MULTIPLE
-      ? curList.length === 0
-        ? EMPTY_ALARM_LIST
-        : curList[curList.length - 1].alarmId
-      : _alarmId;
+  const requestId =
+    requestType === ALL_LOAD ? EMPTY_ALARM_LIST :
+    requestType === LOAD_MULTIPLE ? curList[curList.length - 1].id
+    : id;
 
   try {
-    const data = (await readAlarm(alarmId, type)).map((dt) =>
+    //console.log("id: "+String(requestId)+"   type: "+String(requestType));
+    const data = (await readAlarm(requestId, requestType)).map((dt) =>
       unBoxingAlarmData(dt)
     );
-    const alarmList = (() => {
-      if (data.length === 0) curList.filter((data) => data.alarmId === alarmId);
-      switch (type) {
+    //console.log(curList);
+    //console.log(data)
+    useAlarmList.getState().setAlarmList((() => {
+      switch (requestType) {
         case LOAD_SINGLE:
-          const index = curList.findIndex((data) => data.alarmId === alarmId);
-          return (curList[index] = data[0]);
+          if (data.length === 0) return curList.filter((a) => a.id !== requestId)
+          const temp = data[0];
+          const newList = curList.filter((a) => a.id !== temp.id && (a.order < temp.order || (a.order === temp.order && a.id < temp.id)));
+          return [...newList, temp]
         case LOAD_MULTIPLE:
-          return alarmId ? [...curList, ...data] : data;
+          return [...curList, ...data.slice(1)];
         case ALL_LOAD:
           return data;
         default:
           return curList;
       }
-    })();
+    })());
 
     return {
-      alarmList,
-      curAlarmId: alarmId,
+      curAlarmId: type === REMOVE_ALARM ? null : requestId,
       isLoadable:
-        type === LOAD_MULTIPLE && data.length < LOAD_VALUE ? false : true,
+        requestType !== LOAD_SINGLE && data.length < LOAD_VALUE ? false : true,
     };
   } catch (err) {
     alert(err);
     return {
-      alarmList: curList,
       curAlarmId: null,
       isLoadable: true,
     };
@@ -91,42 +91,50 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
   const url = new URL(request.url);
-  url.search = "";
+  url.search="";
   const data = await request.formData();
-  const type = data.get("type");
+  const type = Number(data.get("type"));
+  const days = data.get("days");
+  const day = days.trim().length !== 0 ? days.split(",") : [];
+  //console.log("year: "+ data.get("year") + " month:"+ data.get("month") +" day: "+ data.get("day")+" hour:"+ data.get("hour")+" min:"+ data.get("minute")+" am:"+data.get("isAm"));
   const form = boxingAlarmData({
-    alarmId: data.get("alarmId"),
+    id: Number(data.get("id")),
     date: {
-      year: data.get("year"),
-      month: data.get("month"),
-      day: data.get("day"),
+      year: Number(data.get("year")),
+      month: Number(data.get("month")),
+      day: Number(data.get("day")),
     },
-    day: [0, 1, 2, 3, 4, 5, 6].filter((d) => !data.get(`w${d}`)),
     time: {
-      hour: data.get("hour"),
-      minute: data.get("minute"),
-      isAm: data.get("am"),
+      hour: Number(data.get("hour")),
+      minute: Number(data.get("minute")),
+      isAm: data.get("isAm") === "true",
     },
-    repeat: data.get("repeat"),
+    isRepeat: data.get("isRepeat") === "true",
     name: data.get("name"),
-    method: data.get("E") ? "E" : data.get("C") ? "C" : "M",
     message: data.get("message"),
+    method: data.get("method"),
+    isActive: data.get("isActive") === "true",
+    day,
   });
 
+
   try {
-    if (form.alarmId === CREATE_ALARM) {
-      url.searchParams.append("alarmId", await createAlarm(form));
-      url.searchParams.append("type", CREATE_ALARM);
-    } else {
-      if (type === "remove") {
-        await deleteAlarm(form.alarmId);
-        url.searchParams.append("type", REMOVE_ALARM);
-      } else {
+    switch(type){
+      case CREATE_ALARM:  
+        form.id = (await createAlarm(form)).id;
+        console.log(form.id);
+        break;
+      case UPDATE_ALARM:
         await updateAlarm(form);
-        url.searchParams.append("type", UPDATE_ALARM);
-      }
-      url.searchParams.append("alarmId", form.alarmId);
+        break;
+      case REMOVE_ALARM:
+        await deleteAlarm(form.id);
+        break;
+      default:
+        throw new Error("잘못된 요청");
     }
+    url.searchParams.append("id", form.id);
+    url.searchParams.append("type", type);
   } catch (err) {
     alert(err);
   }

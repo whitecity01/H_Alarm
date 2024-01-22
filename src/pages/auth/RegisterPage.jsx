@@ -17,16 +17,17 @@ export default RegisterPage;
 export const action = async ({ request }) => {
   const data = await request.formData();
 
-  const authForm = {
-    emil: data.get("email-form"),
-    phoneNumber: data.get("phone-number-form"),
-    password: data.get("pw-form"),
-  };
-
-  const res = await requestRegister(authForm);
-
-  if (res === 200) {
-    window.alert("회원가입이 완료되었습니다.");
-    return redirect("/home");
+  try{
+    await requestRegister(
+      data.get("email-form"),
+      data.get("pw-form"),
+      data.get("phone-number-form"),
+      data.get("email-token"),
+      data.get("phone-number-token")
+    );
+    return redirect("/");
+  }catch(e){
+    alert("시간 만료");
+    return redirect("/register");
   }
 };

@@ -2,7 +2,7 @@ import { Form } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import "styles/alarm/addAlarmForm.scss";
-import { CREATE_ALARM } from "constants/alarm";
+import { ALARM_DTO_CALL, ALARM_DTO_EMAIL, ALARM_DTO_FRI, ALARM_DTO_MON, ALARM_DTO_SAT, ALARM_DTO_SMS, ALARM_DTO_SUN, ALARM_DTO_THU, ALARM_DTO_TUE, ALARM_DTO_WED, CREATE_ALARM, REMOVE_ALARM, UPDATE_ALARM } from "constants/alarm";
 
 /**
  * AddAlarm 컴포넌트. 페이지 좌측에 위치. AlarmData의 수정 및 저장, 삭제 기능을 함
@@ -13,15 +13,16 @@ import { CREATE_ALARM } from "constants/alarm";
  * @param {Function} param.remove - 삭제 버튼을 누를때 수행할 함수
  * @returns {JSX.Element} AddAlarm 컴포넌트를 렌더링
  */
-const AddAlarmForm = ({ alarmData }) => {
-  const [alarmId, setAlarmId] = useState(alarmData.alarmId);
-  const [time, setTime] = useState(alarmData.time);
-  const [method, setMethod] = useState(alarmData.method);
-  const [date, setDate] = useState(alarmData.date);
-  const [day, setDay] = useState(alarmData.day);
-  //const [repeat, setRepeat] = useState(alarmData.repeat);
-  const [name, setName] = useState(alarmData.name);
-  //const [message, setMessage] = useState(alarmData.message);
+const AddAlarmForm = ({ data }) => {
+  const [id, setId] = useState(data.id);
+  const [date, setDate] = useState(data.date);
+  const [time, setTime] = useState(data.time);
+  const [isRepeat, setIsRepeat] = useState(data.isRepeat);
+  const [method, setMethod] = useState(data.method);
+  const [name, setName] = useState(data.name);
+  const [message, setMessage] = useState(data.message);
+  const [isActive, setIsActive] = useState(data.isActive);
+  const [day, setDay] = useState(data.day);
 
   const timeSelect = ({ target }) => {
     switch (target.name) {
@@ -93,28 +94,39 @@ const AddAlarmForm = ({ alarmData }) => {
   };
 
   const inputName = ({ target }) => setName(target.value);
+
+  const verify = (e) => {
+    if (name.trim().length === 0){
+      e.preventDefault();
+      alert("이름은 필수 값 입니다.");
+    }
+  }
+
   useEffect(() => {
-    setAlarmId(alarmData.alarmId);
-    setTime(alarmData.time);
-    setMethod(alarmData.method);
-    setDate(alarmData.date);
-    setDay(alarmData.day);
-    //setRepeat(alarmData.repeat);
-    setName(alarmData.name);
-    //setMessage(alarmData.message);
-  }, [alarmData]);
+    setId(data.id);
+    setDate(data.date);
+    setTime(data.time);
+    setIsRepeat(data.isRepeat);
+    setMethod(data.method);
+    setName(data.name);
+    setMessage(data.message);
+    setIsActive(data.isActive);
+    setDay(data.day);
+  }, [data]);
 
   const TrashCan = () =>
-    alarmId !== CREATE_ALARM ? (
-      <button type="submit" name="type" value="remove">
+    id !== CREATE_ALARM ? (
+      <button type="submit" name="type" value={REMOVE_ALARM}>
         <img src="trash-can-1.png" alt="trash" />
       </button>
     ) : (
       <></>
-    );
+  );
+
+  const type = id===CREATE_ALARM ? CREATE_ALARM : UPDATE_ALARM;
 
   return (
-    <Form method="post" className="addAlarm-form">
+    <Form method="post" className="addAlarm-form" onSubmit={verify}>
       <div>
         <TrashCan />
       </div>
@@ -167,63 +179,56 @@ const AddAlarmForm = ({ alarmData }) => {
           <button
             type="button"
             onClick={inputDay}
-            name="w0"
-            value={day.includes("w0")}
-            className={!day.includes("w0") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_SUN}
+            className={!day.includes(ALARM_DTO_SUN) ? "addAlarm-disabled" : ""}
           >
             일
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w1"
-            value={day.includes("w1")}
-            className={!day.includes("w1") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_MON}
+            className={!day.includes(ALARM_DTO_MON) ? "addAlarm-disabled" : ""}
           >
             월
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w2"
-            value={day.includes("w2")}
-            className={!day.includes("w2") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_TUE}
+            className={!day.includes(ALARM_DTO_TUE) ? "addAlarm-disabled" : ""}
           >
             화
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w3"
-            value={day.includes("w3")}
-            className={!day.includes("w3") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_WED}
+            className={!day.includes(ALARM_DTO_WED) ? "addAlarm-disabled" : ""}
           >
             수
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w4"
-            value={day.includes("w4")}
-            className={!day.includes("w4") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_THU}
+            className={!day.includes(ALARM_DTO_THU) ? "addAlarm-disabled" : ""}
           >
             목
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w5"
-            value={day.includes("w5")}
-            className={!day.includes("w5") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_FRI}
+            className={!day.includes(ALARM_DTO_FRI) ? "addAlarm-disabled" : ""}
           >
             금
           </button>
           <button
             type="button"
             onClick={inputDay}
-            name="w6"
-            value={day.includes("w6")}
-            className={!day.includes("w6") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_SAT}
+            className={!day.includes(ALARM_DTO_SAT) ? "addAlarm-disabled" : ""}
           >
             토
           </button>
@@ -237,9 +242,8 @@ const AddAlarmForm = ({ alarmData }) => {
           <button
             type="button"
             onClick={selectMethod}
-            name="E"
-            value={method === "E"}
-            className={!(method === "E") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_EMAIL}
+            className={!(method === ALARM_DTO_EMAIL) ? "addAlarm-disabled" : ""}
           >
             이메일
           </button>
@@ -247,9 +251,8 @@ const AddAlarmForm = ({ alarmData }) => {
           <button
             type="button"
             onClick={selectMethod}
-            name="C"
-            value={method === "C"}
-            className={!(method === "C") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_CALL}
+            className={!(method === ALARM_DTO_CALL) ? "addAlarm-disabled" : ""}
           >
             전화
           </button>
@@ -257,9 +260,8 @@ const AddAlarmForm = ({ alarmData }) => {
           <button
             type="button"
             onClick={selectMethod}
-            name="M"
-            value={method === "M"}
-            className={!(method === "M") ? "addAlarm-disabled" : ""}
+            name={ALARM_DTO_SMS}
+            className={!(method === ALARM_DTO_SMS) ? "addAlarm-disabled" : ""}
           >
             문자
           </button>
@@ -321,10 +323,13 @@ const AddAlarmForm = ({ alarmData }) => {
         </div>
       </div>
       <div>
-        <input type="hidden" name="alarmId" value={alarmId} />
-        <input type="hidden" name="repeat" value="true" />
-        <input type="hidden" name="message" value="" />
-        <button type="submit" name="type" value="save">
+        <input type="hidden" name="method" value={method} />
+        <input type="hidden" name="days" value={day} />
+        <input type="hidden" name="id" value={id} />
+        <input type="hidden" name="isRepeat" value={isRepeat} />
+        <input type="hidden" name="message" value={message} />
+        <input type="hidden" name="isActive" value={isActive} />
+        <button type="submit" name="type" value={type}>
           저장
         </button>
       </div>

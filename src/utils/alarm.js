@@ -1,4 +1,4 @@
-import { CREATE_ALARM } from "constants/alarm";
+import { ALARM_DTO_EMAIL, ALARM_DTO_FRI, ALARM_DTO_MON, ALARM_DTO_SAT, ALARM_DTO_SUN, ALARM_DTO_THU, ALARM_DTO_TUE, ALARM_DTO_WED, CREATE_ALARM } from "constants/alarm";
 
 /**
  * 유닉스 시간을 받아 날짜를 포함하는 객체로 만들어서 반환
@@ -25,13 +25,8 @@ export const getTime = (time) => {
     hour: dt.getHours(),
     minute: dt.getMinutes(),
   };
-  const isAm =
-    timeObj.hour < 12
-      ? true
-      : (() => {
-          timeObj.hour = timeObj.hour === 12 ? 12 : timeObj.hour - 12;
-          return false;
-        })();
+  const isAm = timeObj.hour < 12 ? true : false;
+  timeObj.hour %= 12;
   return {
     hour: timeObj.hour.toString().padStart(2, " "),
     minute: timeObj.minute.toString().padStart(2, "0"),
@@ -39,27 +34,39 @@ export const getTime = (time) => {
   };
 };
 
+export const getMillisFromDate = date =>{
+  return new Date(date.year, date.month - 1, date.day ).getTime() + 32400000;
+}
+
+export const getMillisFromTime = time => {
+  return new Date(
+    1970,0,1,
+    (time.hour + (time.isAm ? 0 : 12)) % 24,
+    time.minute,0
+  ).getTime() + 32400000;
+}
+
 /**
  * 숫자값을 받아 요일로 반환
- * @param {Number} week
+ * @param {String} week
  * @returns {String} 요일을 담은 문자열
  */
 export const getDay = (week) => {
   return week.map((item) => {
     switch (item) {
-      case 0:
+      case ALARM_DTO_SUN:
         return "일";
-      case 1:
+      case ALARM_DTO_MON:
         return "월";
-      case 2:
+      case ALARM_DTO_TUE:
         return "화";
-      case 3:
+      case ALARM_DTO_WED:
         return "수";
-      case 4:
+      case ALARM_DTO_THU:
         return "목";
-      case 5:
+      case ALARM_DTO_FRI:
         return "금";
-      case 6:
+      case ALARM_DTO_SAT:
         return "토";
       default:
         return NaN;
@@ -73,21 +80,16 @@ export const getDay = (week) => {
  * @returns {Object} 압축된 데이터
  */
 export const boxingAlarmData = (data) => {
-  const time = new Date(
-    1970,
-    0,
-    1,
-    data.time.hour + 9 + (data.time.isAm ? 0 : 12),
-    data.time.minute
-  ).getTime();
-  const method =
-    data.method === "E" ? "email" : data.method === "C" ? "call" : "message";
-  const date =
-    data.day.length === 0
-      ? new Date(data.date.year, data.date.month - 1, data.date.day).getTime()
-      : null;
-  const day = data.day.length === 0 ? null : data.day;
-  return { ...data, time, method, date, day };
+  return {
+    id: data.id,
+    datetime: getMillisFromDate(data.date)+getMillisFromTime(data.time),
+    isRepeat: data.isRepeat,
+    name: data.name,
+    message: data.message,
+    method: data.method,
+    isActive: data.isActive,
+    day: data.day
+  };
 };
 
 /**
@@ -97,14 +99,16 @@ export const boxingAlarmData = (data) => {
  */
 export const unBoxingAlarmData = (data) => {
   return {
-    time: data.time ? getTime(data.time) : getTime(new Date().getTime()),
-    method: data.method === "email" ? "E" : data.method === "call" ? "C" : "M",
-    alarmId: data.alarmId,
-    date: data.date ? getDate(data.date) : getDate(new Date().getTime()),
-    day: data.day ? data.day : [],
-    repeat: data.repeat,
+    id: data.id,
+    order: (data.datetime + 32400000) % 86400000,
+    date: data.datetime ? getDate(data.datetime) : getDate(new Date().getTime()),
+    time: data.datetime ? getTime(data.datetime) : getTime(new Date().getTime()),
+    isRepeat: data.isRepeat,
     name: data.name,
     message: data.message,
+    method: data.method,
+    isActive: data.isActive,
+    day: data.day,
   };
 };
 
@@ -114,17 +118,17 @@ export const unBoxingAlarmData = (data) => {
  */
 export const getEmptyAlarmData = () => {
   return {
-    alarmId: CREATE_ALARM,
-    date: 0,
-    day: [],
-    time: 0,
-    repeat: false,
-    name: "",
-    method: "email",
-    message: "",
+    id: CREATE_ALARM,
+    datetime:0,
+    isRepeat: false,
+    name:"",
+    message:"",
+    method:ALARM_DTO_EMAIL,
+    isActive: true,
+    day: []
   };
 };
 
 export const dateToString = (date) => {
-  return date ? `${date.year}-${date.month}-${date.day}` : date.day.join(" ");
+  return date instanceof Array ? date.join(" ") : `${date.year}-${date.month}-${date.day}`;
 };
