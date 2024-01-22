@@ -53,12 +53,12 @@ export const loader = async ({ request }) => {
     : id;
 
   try {
-    console.log("id: "+String(requestId)+"   type: "+String(requestType));
+    //console.log("id: "+String(requestId)+"   type: "+String(requestType));
     const data = (await readAlarm(requestId, requestType)).map((dt) =>
       unBoxingAlarmData(dt)
     );
-    console.log(curList);
-    console.log(data)
+    //console.log(curList);
+    //console.log(data)
     useAlarmList.getState().setAlarmList((() => {
       switch (requestType) {
         case LOAD_SINGLE:
